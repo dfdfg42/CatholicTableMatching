@@ -8,7 +8,7 @@ public class WaitingSame {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne
-    private User user;
+
 
 }
+// 동성 밥용 일단 냅둠

@@ -1,16 +1,16 @@
-spring: #???? ??
-  datasource: #???? 2?
-    url: jdbc:h2:tcp://localhost/~/CatholicTablleMatching #4?
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/CatholicTableMatching
     username: sa
     password:
     driver-class-name: org.h2.Driver
-  jpa: #???? 2?
-    hibernate: #???? 4?
-      ddl-auto: create #???? 6?
-    properties: #???? 4?
-      hibernate: #???? 6?
-        # show_sql: true #???? 8?
-        format_sql: true #???? 8?
-logging.level: #???? ??
-  org.hibernate.SQL:  #???? 2?zz
-  org.hibernate.orm.jdbc.bind: trace
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        # show_sql: true
+        format_sql: true
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.type.descriptor.sql: trace

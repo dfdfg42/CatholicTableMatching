@@ -10,7 +10,8 @@ public class Preference {
     private String foodType; // "Korean", "Chinese", "Japanese", "Western"
     private String timeSlot; // "Morning", "Afternoon", "Evening"
     private String preferredGender; // 'M', 'F', or 'Any'
-    @ManyToOne
-    private User user;
+
     // Other fields and methods
 }
+
+// 이걸 버릴계획
