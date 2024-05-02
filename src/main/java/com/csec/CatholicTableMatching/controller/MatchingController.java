@@ -1,16 +1,13 @@
 package com.csec.CatholicTableMatching.controller;
 
 import ch.qos.logback.core.model.Model;
-import com.csec.CatholicTableMatching.domain.Match;
-import com.csec.CatholicTableMatching.domain.User;
+import com.csec.CatholicTableMatching.domain.Customer;
 import com.csec.CatholicTableMatching.service.MatchingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.List;
 
 @Controller
 public class MatchingController {
@@ -23,7 +20,7 @@ public class MatchingController {
     }
 
     @PostMapping("/match")
-    public String findMatches(@ModelAttribute User user, Model model) {
+    public String findMatches(@ModelAttribute Customer user, Model model) {
         // 대기열에 사람이 있는지 확인
         boolean isWaitingQueueEmpty = matchingService.isWaitingQueueEmpty();
 

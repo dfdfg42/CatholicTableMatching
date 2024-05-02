@@ -1,24 +1,22 @@
 package com.csec.CatholicTableMatching.service;
 
 import com.csec.CatholicTableMatching.domain.Match;
-import com.csec.CatholicTableMatching.domain.User;
+import com.csec.CatholicTableMatching.domain.Customer;
 import com.csec.CatholicTableMatching.repository.MatchRepository;
 import com.csec.CatholicTableMatching.repository.PreferenceRepository;
 import com.csec.CatholicTableMatching.repository.UserRepository;
 import com.csec.CatholicTableMatching.repository.WatingSameRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 @Service
 @RequiredArgsConstructor
 public class MatchingService {
-    private Queue<User> waitingQueue = new LinkedList<>();
+    private Queue<Customer> waitingQueue = new LinkedList<>();
     private UserRepository userRepository;
     private PreferenceRepository preferenceRepository;
     private MatchRepository matchRepository;
@@ -27,15 +25,15 @@ public class MatchingService {
         return waitingQueue.isEmpty();
     }
 
-    public void addUserToQueue(User user) {
+    public void addUserToQueue(Customer user) {
         waitingQueue.offer(user);
     }
 
     private WatingSameRepository waitingSameRepository;
 
-    public void processMatchWithUserInQueue(User newUser) {
+    public void processMatchWithUserInQueue(Customer newUser) {
         if (!waitingQueue.isEmpty()) {
-            User matchedUser = waitingQueue.poll();
+            Customer matchedUser = waitingQueue.poll();
 
             // Create and save a new match entity
             Match newMatch = new Match();

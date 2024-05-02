@@ -7,4 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PreferenceRepository extends JpaRepository<Preference, Long> {
 }
-//dd
+// 이것도 일단 버릴계획
