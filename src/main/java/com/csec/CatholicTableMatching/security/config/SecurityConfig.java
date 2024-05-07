@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final PrincipalOauth2UserService principalOauth2UserService;
+//    private final PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception  {
@@ -30,17 +30,17 @@ public class SecurityConfig {
                         .invalidateHttpSession(true).deleteCookies("JSESSIONID")
                 )
 
-                .oauth2Login(login -> login
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/")
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(principalOauth2UserService))
-                )
-
-                .exceptionHandling(exceptionHandler -> exceptionHandler
-                        .authenticationEntryPoint(new MyAuthenticationEntryPoint())
-                        .accessDeniedHandler(new MyAccessDeniedHandler())
-                )
+//                .oauth2Login(login -> login
+//                        .loginPage("/login")
+//                        .defaultSuccessUrl("/")
+//                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+//                                .userService(principalOauth2UserService))
+//                )
+//
+//                .exceptionHandling(exceptionHandler -> exceptionHandler
+//                        .authenticationEntryPoint(new MyAuthenticationEntryPoint())
+//                        .accessDeniedHandler(new MyAccessDeniedHandler())
+//                )
 
                 .headers(headers ->
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
