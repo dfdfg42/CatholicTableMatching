@@ -1,7 +1,7 @@
 package com.csec.CatholicTableMatching.repository;
 
-import com.csec.CatholicTableMatching.domain.Customer;
+import com.csec.CatholicTableMatching.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Customer, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 }

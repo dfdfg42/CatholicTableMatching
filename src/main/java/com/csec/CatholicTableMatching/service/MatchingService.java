@@ -2,9 +2,9 @@ package com.csec.CatholicTableMatching.service;
 
 import com.csec.CatholicTableMatching.domain.*;
 import com.csec.CatholicTableMatching.repository.MatchRepository;
-import com.csec.CatholicTableMatching.repository.PreferenceRepository;
 import com.csec.CatholicTableMatching.repository.UserRepository;
 import com.csec.CatholicTableMatching.repository.WaitingAnotherRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +15,8 @@ import java.util.Queue;
 @Service
 @RequiredArgsConstructor
 public class MatchingService {
-    private Queue<Customer> waitingQueue = new LinkedList<>();
+    private Queue<User> waitingQueue = new LinkedList<>();
     private UserRepository userRepository;
-    private PreferenceRepository preferenceRepository;
     private MatchRepository matchRepository;
 
 
@@ -25,7 +24,7 @@ public class MatchingService {
         return waitingQueue.isEmpty();
     }
 
-    public void addUserToQueue(Customer user) {
+    public void addUserToQueue(User user) {
         waitingQueue.offer(user);
     }
 
@@ -39,10 +38,14 @@ public class MatchingService {
             newWaiting.setFoodType(matchForm.getFoodtype());
             newWaiting.setMatchDate(new Date());
             newWaiting.setTimeSlot(matchForm.getTimeSlot());
+            newWaiting.setGender(matchForm.getGender());
+            newWaiting.setName(matchForm.getName());
             waitingAnotherRepository.save(newWaiting); // Save the match to the database using MatchRepository
 
             // Additional logic as needed
     }
+
+
 
 }
 

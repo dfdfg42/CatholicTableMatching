@@ -6,8 +6,6 @@ import lombok.Setter;
 
 import java.util.Date;
 
-import java.util.Date;
-
 @Entity
 @Setter
 @Getter
@@ -17,14 +15,17 @@ public class WaitingAnother {
     private long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Customer user;
+    private User user;
+
+    private String name;
+
+    private String gender;
 
     private String foodType;
 
     private Date matchDate;
 
     private String timeSlot; // "Morning", "Afternoon", "Evening"
-
 
 
 

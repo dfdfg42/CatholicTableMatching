@@ -15,10 +15,10 @@ public class Match {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Customer user1;
+    private User user1;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Customer user2;
+    private User user2;
 
     private Date matchDate;
 

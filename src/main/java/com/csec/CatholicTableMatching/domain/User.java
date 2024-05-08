@@ -2,12 +2,14 @@ package com.csec.CatholicTableMatching.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Getter
-public class Customer {
+@Setter
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,5 +29,5 @@ public class Customer {
 
 
 
-    // Other fields and methods
+
 }

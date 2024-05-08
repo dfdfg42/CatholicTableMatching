@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+</head>
+<body>
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <!-- Brand/logo -->
+            <a class="navbar-brand" href="/" th:href="@{/}">CSEC</a>
+
+            <!-- 네비게이션 버튼 영역 -->
+            <div class="d-flex">
+                <!-- 로그인 버튼 -->
+                <a th:href="@{/login}" class="btn btn-pink me-3" style="background-color: skyblue; color: black">로그인</a>
+                <!-- 회원 가입 버튼 -->
+                <a th:href="@{/signup}" class="btn btn-pink" style="background-color: pink; color: black" >회원 가입</a>
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>
