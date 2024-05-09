@@ -18,16 +18,11 @@ public class User {
 
     private String gender;     // 'M' for male, 'F' for female
 
-    @OneToOne(mappedBy = "user")
-    private WaitingAnother waitingAnother;
-
-    @OneToMany(mappedBy = "user1")
-    private List<Match> matchesAsUser1;
-
-    @OneToMany(mappedBy = "user2")
-    private List<Match> matchesAsUser2;
+    private boolean matched = false;
 
 
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "match_form_id", referencedColumnName = "id")
+    private MatchForm matchForm;
 
 }
