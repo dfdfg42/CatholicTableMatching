@@ -38,27 +38,32 @@ public class MatchingServiceIntegrationTest {
     @Transactional
     public void testCreateMatch() {
         // Arrange
-        User user = new User();
-        user.setUsername("user1");
-        user.setGender("M");
-        user.setMatched(false);
-        userRepository.save(user);
+        User user1 = new User();
+        user1.setUsername("user1");
+        user1.setGender("M");
+        user1.setMatched(false);
+        MatchForm matchForm1 = new MatchForm();
+        matchForm1.setFoodType("Italian");
+        matchForm1.setTimeSlot("Evening");
+        matchForm1.setPreferGender("F");
+        //matchFormRepository.save(matchForm1);
+        user1.setMatchForm(matchForm1);
+        userRepository.save(user1);
 
         User potentialMatch = new User();
         potentialMatch.setUsername("user2");
         potentialMatch.setGender("F");
         potentialMatch.setMatched(false);
+        MatchForm matchForm2 = new MatchForm();
+        matchForm2.setFoodType("Italian");
+        matchForm2.setTimeSlot("Evening");
+        matchForm2.setPreferGender("F");
+        //matchFormRepository.save(matchForm2);
+        potentialMatch.setMatchForm(matchForm2);
         userRepository.save(potentialMatch);
 
-        MatchForm matchForm = new MatchForm();
-        matchForm.setFoodType("Italian");
-        matchForm.setTimeSlot("Evening");
-        matchForm.setPreferGender("F");
-        user.setMatchForm(matchForm);
-        potentialMatch.setMatchForm(matchForm);
-
         // Act
-        Match result = matchingService.createMatch(user);
+        Match result = matchingService.createMatch(user1);
 
         // Assert
         assertNotNull(result, "The match result should not be null.");

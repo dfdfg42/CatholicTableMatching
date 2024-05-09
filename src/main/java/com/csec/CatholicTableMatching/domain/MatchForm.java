@@ -19,7 +19,6 @@ public class MatchForm{
 
     private String foodType;
     private String timeSlot;
-    private String name;
     private String gender;
     private String preferGender;
 

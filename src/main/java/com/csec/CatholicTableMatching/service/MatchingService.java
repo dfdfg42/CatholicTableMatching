@@ -16,10 +16,10 @@ import java.util.Queue;
 @Service
 @RequiredArgsConstructor
 public class MatchingService {
-    private UserRepository userRepository;
-    private MatchRepository matchRepository;
+    private final UserRepository userRepository;
+    private final MatchRepository matchRepository;
 
-    private MatchFormRepository matchFormRepository;
+    private final MatchFormRepository matchFormRepository;
 
     @Transactional
     public Match createMatch(User user) {

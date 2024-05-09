@@ -9,6 +9,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "users") // 예약어 충돌을 방지하기 위해 테이블 이름 변경
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
