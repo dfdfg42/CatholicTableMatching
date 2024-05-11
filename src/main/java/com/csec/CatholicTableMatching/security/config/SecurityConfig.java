@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -28,14 +30,9 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
 
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .invalidateHttpSession(true).deleteCookies("JSESSIONID")
-                )
-
                 .oauth2Login(login -> login
                         .loginPage("/")
-                        .defaultSuccessUrl("/")
+                        .defaultSuccessUrl("/match")
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
                                 .userService(principalOauth2UserService))
                 )

@@ -3,7 +3,7 @@ package com.csec.CatholicTableMatching.security.oauth;
 
 import com.csec.CatholicTableMatching.security.domain.User;
 import com.csec.CatholicTableMatching.security.domain.UserRole;
-import com.csec.CatholicTableMatching.security.repository.CUserRepository;
+import com.csec.CatholicTableMatching.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Slf4j
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
-    private final CUserRepository userRepository;
+    private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
 
     @Override

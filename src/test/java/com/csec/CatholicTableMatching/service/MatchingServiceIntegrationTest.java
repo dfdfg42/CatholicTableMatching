@@ -2,26 +2,17 @@ package com.csec.CatholicTableMatching.service;
 
 import com.csec.CatholicTableMatching.domain.Match;
 import com.csec.CatholicTableMatching.domain.MatchForm;
-import com.csec.CatholicTableMatching.domain.User;
-import com.csec.CatholicTableMatching.repository.MatchFormRepository;
 import com.csec.CatholicTableMatching.repository.MatchRepository;
-import com.csec.CatholicTableMatching.repository.UserRepository;
-import com.csec.CatholicTableMatching.service.MatchingService;
+import com.csec.CatholicTableMatching.security.domain.User;
+import com.csec.CatholicTableMatching.security.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 @SpringBootTest
 public class MatchingServiceIntegrationTest {
 
@@ -39,7 +30,7 @@ public class MatchingServiceIntegrationTest {
     public void testCreateMatch() {
         // Arrange
         User user1 = new User();
-        user1.setUsername("user1");
+        user1.setLoginId("user1");
         user1.setGender("M");
         user1.setMatched(false);
         MatchForm matchForm1 = new MatchForm();
@@ -51,7 +42,7 @@ public class MatchingServiceIntegrationTest {
         userRepository.save(user1);
 
         User potentialMatch = new User();
-        potentialMatch.setUsername("user2");
+        potentialMatch.setLoginId("user2");
         potentialMatch.setGender("F");
         potentialMatch.setMatched(false);
         MatchForm matchForm2 = new MatchForm();
