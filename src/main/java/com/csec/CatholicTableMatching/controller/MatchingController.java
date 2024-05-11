@@ -24,9 +24,10 @@ public class MatchingController {
         return "index";
     }
 
-    @RequestMapping("/match")
-    public String MatchStart(@ModelAttribute User user){
-        return "match_form";
+    @GetMapping("/match")
+    public String MatchStart(@ModelAttribute User user ,Model model){
+        model.addAttribute("matchForm", new MatchForm());
+        return "match_form_nes";
     } // 매치 폼 화면이동
 
     @PostMapping("/match")

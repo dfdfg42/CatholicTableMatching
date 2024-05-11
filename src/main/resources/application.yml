@@ -5,6 +5,7 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+
   h2:
     console:
       enabled: true
@@ -17,6 +18,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+
 
 logging.level:
   org.hibernate.SQL: debug
