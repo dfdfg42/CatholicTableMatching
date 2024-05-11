@@ -17,10 +17,8 @@ public class MatchForm{
     @OneToOne(mappedBy = "matchForm")
     private User user;
 
-    private String phoneNum;
     private String foodType;
     private String timeSlot;
-    private String gender;
     private String preferGender;
 
 }

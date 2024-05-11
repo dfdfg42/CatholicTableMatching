@@ -25,6 +25,8 @@ public class User {
 
     private String gender;     // 'M' for male, 'F' for female
 
+    private String phoneNum;
+
     private boolean matched = false;
 
     @OneToOne(cascade = CascadeType.ALL)

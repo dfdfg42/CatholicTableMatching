@@ -35,11 +35,10 @@
         }
 
         .match-form-container {
-            text-align: center;
+            text-align: left;
             max-width: 350px;
-            width: 300px;
-            height: 700px;
-            width: 150%;
+            width: 100%;
+            height: auto;
             padding: 15px;
             margin: auto;
             font-size: 18px;
@@ -48,6 +47,7 @@
         .nes-field label, .title {
             font-size: 18px;
             margin-bottom: 8px;
+            text-align: left;
         }
 
         .nes-select, .nes-input {
@@ -57,18 +57,34 @@
         .nes-btn {
             font-size: 18px;
         }
+
+        .button-center {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .nes-radio-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
-<!--<div th:replace="layout/navbar :: navbar"></div>-->
 
-<div class="nes-container with-title is-centered match-form-container">
-    <p class="title">만냠 정보 입력</p>
+<div class="nes-container with-title match-form-container">
+    <p class="title">
+        <span class="nes-text is-primary">
+            만냠 정보 입력
+        </span>
+    </p>
     <form th:action="@{/match}" th:object="${matchForm}" method="post">
         <!-- 음식 종류 선택 -->
         <div class="nes-field">
             <label for="foodType">음식 종류</label>
-            <div class="nes-select is-error">
+            <div class="nes-select is-success">
                 <select id="foodType" th:field="*{foodType}" required>
                     <option value="" disabled selected>음식 종류를 선택하세요</option>
                     <option value="한식">한식</option>
@@ -81,7 +97,7 @@
         <!-- 식사 시간 선택 -->
         <div class="nes-field">
             <label for="mealTime">식사 시간</label>
-            <div class="nes-select is-success">
+            <div class="nes-select is-warning">
                 <select id="mealTime" th:field="*{timeSlot}" required>
                     <option value="" disabled selected>식사 시간</option>
                     <option value="점심">점심</option>
@@ -89,35 +105,23 @@
                 </select>
             </div>
         </div>
-        <!-- 성별 선택 -->
         <div class="nes-field">
-            <label for="gender">성별</label>
-            <div class="nes-select is-warning">
-                <select id="gender" th:field="*{gender}" required>
-                    <option value="" disabled selected>성별</option>
-                    <option value="남자">남자</option>
-                    <option value="여자">여자</option>
-                </select>
+            <label>매칭선호</label>
+            <div class="nes-radio-group" style="background-color:#212529; padding: 1rem 0;">
+                <label>
+                    <input type="radio" th:field="*{preferGender}" value="남" class="nes-radio is-dark" name="preferGender"checked />
+                    <span>이성</span>
+                </label>
+                <!--<label>
+                    <input type="radio" th:field="*{preferGender}" value="여" class="nes-radio is-dark" name="preferGender" />
+                    <span>동성</span>
+                </label>-->
             </div>
-        </div>
-        <!-- 동성/이성 선택 -->
-        <div class="nes-field">
-            <label for="orientation">매칭 선호</label>
-            <div class="nes-select is-dark">
-                <select id="orientation" th:field="*{preferGender}" required>
-                    <option value="" disabled selected>선호</option>
-<!--                    <option value="동성">동성</option>-->
-                    <option value="이성">이성</option>
-                </select>
-            </div>
-        </div>
-        <!-- 사용자 전화번호 입력 -->
-        <div class="nes-field">
-            <label for="phone">전화번호</label>
-            <input type="tel" id="phone" th:field="*{phoneNum}" class="nes-input" placeholder="010-1234-5678" pattern="^010-[0-9]{4}-[0-9]{4}$" title="010-1234-5678과 같은 형식으로 입력하세요" required>
         </div>
         <!-- 매칭하기 버튼 -->
-        <button type="submit" class="nes-btn is-primary">매칭하기</button>
+        <div class="button-center">
+            <button type="submit" class="nes-btn is-primary">매칭하기</button>
+        </div>
     </form>
 </div>
 

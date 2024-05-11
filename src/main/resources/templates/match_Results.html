@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>매칭 시작 및 결과</title>
 </head>
 <body>
 
+<!-- 매칭 결과 표시 -->
+<div th:if="${matches}">
+    <h2>매칭 결과</h2>
+    <div th:each="match : ${matches}">
+        <p th:text="'매칭 상대: ' + ${match.user2.name} + ', 음식 종류: ' + ${match.foodType} + ', 시간: ' + ${match.timeSlot}"></p>
+    </div>
+</div>
+
+<h1>매칭을 시작하세요</h1>
+<form th:action="@{/matching}" method="get">
+    <button type="submit">매칭 시작</button>
+</form>
 </body>
 </html>
