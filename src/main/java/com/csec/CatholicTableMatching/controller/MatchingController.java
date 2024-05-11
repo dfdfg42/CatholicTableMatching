@@ -17,7 +17,6 @@ public class MatchingController {
 
     private UserService userService;
 
-
     private MatchForm matchForm;
 
     @GetMapping("/")
@@ -32,7 +31,6 @@ public class MatchingController {
 
     @PostMapping("/match")
     public String findMatches(@ModelAttribute("matchForm") MatchForm matchForm) {
-        matchingService.processMatchWithUserInQueue(matchForm);
         Long userId = matchForm.getUser().getId(); // 가정: getUser()가 사용자 ID를 반환한다.
         return "redirect:/match/" + userId;
     } // 매치 넣으면 매치현황판 으로 이동할수 있게
