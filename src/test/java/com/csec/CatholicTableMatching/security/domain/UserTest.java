@@ -10,11 +10,11 @@ public class UserTest {
     @DisplayName("유저생성")
     void createUser() {
         // given, when
-        User user = User.builder().id(1L).nickname("tester").build();
+        User user = User.builder().id(1L).loginId("tester").build();
 
         // then
         Assertions.assertEquals(user.getId(), 1L);
-        Assertions.assertEquals(user.getNickname(), "tester");
+        Assertions.assertEquals(user.getLoginId(), "tester");
     }
 
 }

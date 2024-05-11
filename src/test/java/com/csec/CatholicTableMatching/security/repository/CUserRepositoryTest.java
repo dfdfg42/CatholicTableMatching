@@ -14,30 +14,30 @@ import static org.junit.jupiter.api.Assertions.*;
 class CUserRepositoryTest {
 
         @Autowired
-        CUserRepository cUserRepository;
+        UserRepository cUserRepository;
 
         @Test
         @DisplayName("유저 생성")
         void createUser() {
             // given
-            User user1 = User.builder().id(1L).nickname("user1").build();
-            User user2 = User.builder().id(1L).nickname("user1").build();
+            User user1 = User.builder().id(1L).loginId("user1").build();
+            User user2 = User.builder().id(1L).loginId("user1").build();
 
             // when
             User result1 = cUserRepository.save(user1);
             User result2 = cUserRepository.save(user2);
 
             // then
-            assertEquals(result1.getNickname(), user1.getNickname());
-            assertEquals(result2.getNickname(), user2.getNickname());
+            assertEquals(result1.getLoginId(), user1.getLoginId());
+            assertEquals(result2.getLoginId(), user2.getLoginId());
         }
 
         @Test
         @DisplayName("유저 리스트 조회")
         void getUserList() {
             // given
-            User user1 = User.builder().id(1L).nickname("user1").build();
-            User user2 = User.builder().id(1L).nickname("user1").build();
+            User user1 = User.builder().id(1L).loginId("user1").build();
+            User user2 = User.builder().id(1L).loginId("user1").build();
             cUserRepository.save(user1);
             cUserRepository.save(user2);
 

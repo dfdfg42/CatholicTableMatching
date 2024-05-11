@@ -1,7 +1,7 @@
 package com.csec.CatholicTableMatching.domain;
 
+import com.csec.CatholicTableMatching.security.domain.User;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

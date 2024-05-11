@@ -1,17 +1,13 @@
 package com.csec.CatholicTableMatching.security.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.csec.CatholicTableMatching.domain.MatchForm;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity (name = "CUSER")
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -20,11 +16,16 @@ public class User {
     private Long id;
 
     private String provider; // 소셜로그인 제공자
-    private String providerId; // 유저 ID
 
     private String loginId;
-    private String password;
-    private String nickname;
 
     private UserRole role;
+
+    private String gender;     // 'M' for male, 'F' for female
+
+    private boolean matched = false;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "match_form_id", referencedColumnName = "id")
+    private MatchForm matchForm;
 }

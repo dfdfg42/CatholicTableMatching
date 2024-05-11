@@ -3,15 +3,14 @@ package com.csec.CatholicTableMatching.service;
 import com.csec.CatholicTableMatching.domain.*;
 import com.csec.CatholicTableMatching.repository.MatchFormRepository;
 import com.csec.CatholicTableMatching.repository.MatchRepository;
-import com.csec.CatholicTableMatching.repository.UserRepository;
+import com.csec.CatholicTableMatching.security.domain.User;
+import com.csec.CatholicTableMatching.security.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 @Service
 @RequiredArgsConstructor
