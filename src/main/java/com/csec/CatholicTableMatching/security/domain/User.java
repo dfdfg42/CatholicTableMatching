@@ -17,6 +17,8 @@ public class User {
 
     private String provider; // 소셜로그인 제공자
 
+    private String name;
+
     private String loginId;
 
     private UserRole role;

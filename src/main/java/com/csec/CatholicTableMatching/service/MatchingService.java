@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,19 @@ public class MatchingService {
     private final MatchRepository matchRepository;
 
     private final MatchFormRepository matchFormRepository;
+
+    @Transactional
+    public List<Match> createMatchForAllUsers() {
+        List<User> users = userRepository.findAllByMatchedFalse();
+        List<Match> matches = new ArrayList<>();
+        for (User user : users) {
+            Match match = createMatch(user);
+            if (match != null) {
+                matches.add(match);
+            }
+        }
+        return matches; // 모든 매치 결과 반환
+    }
 
     @Transactional
     public Match createMatch(User user) {

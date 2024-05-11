@@ -2,11 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>매칭 현황</title>
+    <title>매칭 결과</title>
 </head>
 <body>
-<div class="container">
-    <h1 th:text="'${customerName}' + '님, 현재 매칭 중입니다.'"></h1>
+<h1>매칭 결과</h1>
+<div th:each="match : ${matches}">
+    <p th:text="'매칭 상대: ' + ${match.user2.name} + ', 음식 종류: ' + ${match.foodType} + ', 시간: ' + ${match.timeSlot}"></p>
 </div>
 </body>
 </html>

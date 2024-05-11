@@ -1,6 +1,8 @@
 package com.csec.CatholicTableMatching.controller;
 
+import com.csec.CatholicTableMatching.domain.Match;
 import com.csec.CatholicTableMatching.domain.MatchForm;
+import com.csec.CatholicTableMatching.repository.MatchFormRepository;
 import com.csec.CatholicTableMatching.security.domain.User;
 import com.csec.CatholicTableMatching.security.repository.UserRepository;
 import com.csec.CatholicTableMatching.service.MatchingService;
@@ -11,13 +13,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class MatchingController {
 
-    private MatchingService matchingService;
+    private final MatchingService matchingService;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final MatchFormRepository matchFormRepository;
 
     private MatchForm matchForm;
 
@@ -33,12 +40,31 @@ public class MatchingController {
         return "match_form_nes";
     } // 매치 폼 화면이동
 
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("/match")
-    public String findMatches(@ModelAttribute("matchForm") MatchForm matchForm) {
-        Long userId = matchForm.getUser().getId(); // 가정: getUser()가 사용자 ID를 반환한다.
-        return "redirect:/match/" + userId;
-    } // 매치 넣으면 매치현황판 으로 이동할수 있게
+    @PreAuthorize("isAuthenticated()")
+    public String findMatches(@ModelAttribute("matchForm") MatchForm matchForm, Principal principal) {
+        // 현재 인증된 사용자의 정보를 조회
+        String loginId = principal.getName();
+        User user = userRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+
+        // MatchForm과 User를 연결
+        matchForm.setUser(user);
+        user.setMatchForm(matchForm); // 편의 메서드를 사용하여 양방향 설정
+        userRepository.save(user);    // User 저장
+
+        return "redirect:/";  // 사용자의 ID를 이용해 리디렉션
+    }
+
+
+    //전체 매칭한 결과 페이지
+    @GetMapping("/matching")
+    @PreAuthorize("isAuthenticated()")
+    public String findAllMatches(Model model) {
+        List<Match> matches = matchingService.createMatchForAllUsers();
+        model.addAttribute("matches", matches);
+        return "matching";  // 매칭 결과 페이지 뷰 이름
+    }
 
     @PreAuthorize("isAuthenticated()") // todo 사용자 id와 인증한 주체의 id가 동일한지도 검사 필요
     @RequestMapping("/match/{userId}")
@@ -48,7 +74,7 @@ public class MatchingController {
         model.addAttribute("customer", user);
         return "match_status";
 
-    } // 매치 현황판
+    } // 매치 현황판*/
 
 
 
