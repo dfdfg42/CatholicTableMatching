@@ -10,13 +10,15 @@
     <style>
         @font-face {
             font-family: 'retro';
-            src: url("../static/Myfont/DungGeunMo.eot"); /* IE9 Compat Modes */
-            src: url("../static/Myfont/DungGeunMo.eot?#iefix") format('embedded-opentype'), /* IE6-IE8 */
-            url("../static/Myfont/DungGeunMo.woff2") format('woff2'), /* Super Modern Browsers */
-            url("../static/Myfont/DungGeunMo.woff") format('woff'); /* Pretty Modern Browsers */
-            /* Safari, Android, iOS */
+            src: url("/Myfont/DungGeunMo.eot"); /* IE9 Compat Modes */
+            src: url("/Myfont/DungGeunMo.eot?#iefix") format('embedded-opentype'), /* IE6-IE8 */
+            url("/Myfont/DungGeunMo.woff2") format('woff2'), /* Super Modern Browsers */
+            url("/Myfont/DungGeunMo.woff") format('woff'); /* Pretty Modern Browsers */
             font-weight: normal;
             font-style: normal;
+            /*
+            기본경로가 static 작업할땐 ../static 배포할땐 지우고 배포하자
+             */
         }
 
         /* 모든 텍스트에 적용 */
@@ -37,6 +39,7 @@
             text-align: center;
             width: 90%;
             max-width: 400px; /* 최대 너비 설정 */
+            width: 400px;
             height: 400px;
         }
         .nes-container {
@@ -58,7 +61,7 @@
         <section class="icon-list">
             <i class="nes-kirby"></i>
         </section>
-        <a th:href="@{/signup}" class="nes-btn is-primary">로그인</a>
+        <a th:href="@{/login}" class="nes-btn is-primary">로그인</a>
     </div>
 </div>
 </body>

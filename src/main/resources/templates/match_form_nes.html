@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>매칭 폼</title>
+    <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet" />
+
+    <style>
+        @font-face {
+            font-family: 'retro';
+            src: url("/Myfont/DungGeunMo.eot"); /* IE9 Compat Modes */
+            src: url("/Myfont/DungGeunMo.eot?#iefix") format('embedded-opentype'), /* IE6-IE8 */
+            url("/Myfont/DungGeunMo.woff2") format('woff2'), /* Super Modern Browsers */
+            url("/Myfont/DungGeunMo.woff") format('woff'); /* Pretty Modern Browsers */
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'retro', sans-serif;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            height: 100vh;
+            font-size: 18px;
+        }
+
+        .full-height {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #212529;
+        }
+
+        .match-form-container {
+            text-align: center;
+            max-width: 350px;
+            width: 300px;
+            height: 700px;
+            width: 150%;
+            padding: 15px;
+            margin: auto;
+            font-size: 18px;
+        }
+
+        .nes-field label, .title {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .nes-select, .nes-input {
+            margin-bottom: 10px;
+        }
+
+        .nes-btn {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<!--<div th:replace="layout/navbar :: navbar"></div>-->
+
+<div class="nes-container with-title is-centered match-form-container">
+    <p class="title">만냠 정보 입력</p>
+    <form th:action="@{/match}" th:object="${matchForm}" method="post">
+        <!-- 음식 종류 선택 -->
+        <div class="nes-field">
+            <label for="foodType">음식 종류</label>
+            <div class="nes-select is-error">
+                <select id="foodType" th:field="*{foodType}" required>
+                    <option value="" disabled selected>음식 종류를 선택하세요</option>
+                    <option value="한식">한식</option>
+                    <option value="중식">중식</option>
+                    <option value="일식">일식</option>
+                    <option value="양식">양식</option>
+                </select>
+            </div>
+        </div>
+        <!-- 식사 시간 선택 -->
+        <div class="nes-field">
+            <label for="mealTime">식사 시간</label>
+            <div class="nes-select is-success">
+                <select id="mealTime" th:field="*{timeSlot}" required>
+                    <option value="" disabled selected>식사 시간</option>
+                    <option value="점심">점심</option>
+                    <option value="저녁">저녁</option>
+                </select>
+            </div>
+        </div>
+        <!-- 성별 선택 -->
+        <div class="nes-field">
+            <label for="gender">성별</label>
+            <div class="nes-select is-warning">
+                <select id="gender" th:field="*{gender}" required>
+                    <option value="" disabled selected>성별</option>
+                    <option value="남자">남자</option>
+                    <option value="여자">여자</option>
+                </select>
+            </div>
+        </div>
+        <!-- 동성/이성 선택 -->
+        <div class="nes-field">
+            <label for="orientation">매칭 선호</label>
+            <div class="nes-select is-dark">
+                <select id="orientation" th:field="*{preferGender}" required>
+                    <option value="" disabled selected>선호</option>
+<!--                    <option value="동성">동성</option>-->
+                    <option value="이성">이성</option>
+                </select>
+            </div>
+        </div>
+        <!-- 사용자 이름 입력 -->
+        <div class="nes-field">
+            <label for="user">사용자 이름</label>
+            <input type="text" id="user" th:field="*{user}" class="nes-input" placeholder="이름을 입력하세요" required>
+        </div>
+        <!-- 사용자 전화번호 입력 -->
+        <div class="nes-field">
+            <label for="phone">전화번호</label>
+            <input type="tel" id="phone" th:field="*{phoneNum}" class="nes-input" placeholder="010-1234-5678" pattern="^010-[0-9]{4}-[0-9]{4}$" title="010-1234-5678과 같은 형식으로 입력하세요" required>
+        </div>
+        <!-- 매칭하기 버튼 -->
+        <button type="submit" class="nes-btn is-primary">매칭하기</button>
+    </form>
+</div>
+
+</body>
+</html>
