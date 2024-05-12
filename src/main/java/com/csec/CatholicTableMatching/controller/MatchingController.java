@@ -4,18 +4,21 @@ import com.csec.CatholicTableMatching.domain.Match;
 import com.csec.CatholicTableMatching.domain.MatchForm;
 import com.csec.CatholicTableMatching.repository.MatchFormRepository;
 import com.csec.CatholicTableMatching.security.domain.User;
+import com.csec.CatholicTableMatching.security.oauth.PrincipalDetails;
 import com.csec.CatholicTableMatching.security.repository.UserRepository;
 import com.csec.CatholicTableMatching.service.MatchingService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -57,7 +60,8 @@ public class MatchingController {
         return "redirect:/matching";  // 사용자의 ID를 이용해 리디렉션
     }
 
-    @GetMapping("/matching") //todo 인증과정 넣어야합니다
+    @GetMapping("/matching")
+    @PreAuthorize("isAuthenticated()")
     public String matching(){
         return "matching";
     } //사용자가 매칭을 넣었을때 넣었다고 보여지는 화면
@@ -82,11 +86,15 @@ public class MatchingController {
 
     } // 매치 현황판*/ 사용자가 나중에 매칭결과를 확인할수 있게 만드는창??
 
-
-    @GetMapping("/userinfo")  //todo 인증과정 넣어야합니다
-    public String userInfo(@ModelAttribute User user){
-
-        return "user_form";
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/userinfo")
+    public String userInfo(@AuthenticationPrincipal PrincipalDetails userDetails, @ModelAttribute User user){
+        User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
+                () -> new RuntimeException());
+        if (loginUser.getPhoneNum() == null) {
+            return "user_form";
+        }
+        return "redirect:/match";
     }
 
 

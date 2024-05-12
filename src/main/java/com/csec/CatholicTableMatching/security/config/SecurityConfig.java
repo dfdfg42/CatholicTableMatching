@@ -32,7 +32,7 @@ public class SecurityConfig {
 
                 .oauth2Login(login -> login
                         .loginPage("/")
-                        .defaultSuccessUrl("/match")
+                        .defaultSuccessUrl("/userinfo")
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
                                 .userService(principalOauth2UserService))
                 )
