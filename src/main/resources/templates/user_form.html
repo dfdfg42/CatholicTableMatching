@@ -28,17 +28,17 @@
 
         .form-container {
             text-align: left;
-            max-width: 450px; /* Increased width */
+            max-width: 350px; /* Increased width */
             width: 100%;
             height: auto;
             padding: 25px; /* Larger padding for container */
             margin: auto;
-            font-size: 24px; /* Increased font size */
+            font-size: 18px; /* Increased font size */
             background-color: white;
         }
 
         .title, .nes-field label {
-            font-size: 22px; /* Larger title and label fonts */
+            font-size: 18px; /* Larger title and label fonts */
             margin-bottom: 10px;
         }
 
@@ -47,7 +47,7 @@
         }
 
         .nes-btn {
-            font-size: 24px; /* Slightly larger button font size */
+            font-size: 18px; /* Slightly larger button font size */
         }
 
         .button-center {
@@ -65,11 +65,13 @@
 
         .nes-radio-group label {
             margin-right: 25px;
-            font-size: 20px; /* Increased radio option font size */
+            font-size: 18px; /* Increased radio option font size */
         }
     </style>
 </head>
 <body>
+<!--- 네비게이션--->
+<nav th:replace="~{layout/navbar_nes :: navbarnes}"></nav>
 
 <div class="nes-container with-title form-container">
     <p class="title">
