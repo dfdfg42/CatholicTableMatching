@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Navigation Example</title>
@@ -77,7 +78,7 @@
         .menu-panel a {
             padding: 10px 15px;
             text-decoration: none;
-            font-size: 22px;
+            font-size: 18px;
             color: white;
             display: block;
             transition: 0.3s;
@@ -87,7 +88,24 @@
             color: #f4f4f4;
             background: #ded199;
         }
+        .menu-panel section {
+            margin-top: auto; /* 버튼을 메뉴의 맨 아래로 밀어붙임 */
+            width: 100%; /* 섹션의 폭을 메뉴 패널에 맞춤 */
+            text-align: center; /* 버튼을 센터 정렬 */
+        }
+
+        .menu-panel {
+            display: flex;
+            flex-direction: column; /* 메뉴 항목들을 세로로 정렬 */
+            justify-content: space-between; /* 링크와 섹션 간 간격 조정 */
+        }
+        .nes-btn.is-primary {
+            color: #ffffff; /* 글자 색상 변경 */
+            padding: 8px 10px; /* 내부 여백 변경 */
+            margin-bottom: 12px;
+        }
     </style>
+
 </head>
 <body>
 
@@ -101,10 +119,27 @@
     </div>
 
     <div id="myNav" class="menu-panel">
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="#">Contact</a>
+        <a href="#">내 정보수정</a>
+        <a href="#">매칭하기</a>
+        <a href="#">매칭현황</a>
+
+        <section>
+            <button type="button" class="nes-btn is-primary" onclick="document.getElementById('dialog-rounded').showModal();">
+                제작자 정보
+            </button>
+            <dialog class="nes-dialog is-rounded" id="dialog-rounded" style="width: 80%;">
+                <form method="dialog">
+                    <p class="title">반가워용</p>
+                    <p>컴공20 고경우 <i class="nes-icon github is-small"></i></p>
+                    <p>컴공20 김준형 <i class="nes-icon github is-small"></i></p>
+                    <p>컴공20 이승원 <i class="nes-icon github is-small"></i></p>
+                    <menu class="dialog-menu" style="display: flex; justify-content: center;">
+                        <button class="nes-btn is-primary">닫기</button>
+                    </menu>
+                </form>
+            </dialog>
+        </section>
+
     </div>
 
     <script>
