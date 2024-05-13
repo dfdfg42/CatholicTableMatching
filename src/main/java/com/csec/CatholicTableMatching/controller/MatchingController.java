@@ -97,6 +97,23 @@ public class MatchingController {
         return "redirect:/match";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/userinfo")
+    public String saveUserInfo(@AuthenticationPrincipal PrincipalDetails userDetails, @ModelAttribute("user") User user) {
+        String username = userDetails.getUsername();
+        User loginUser = userRepository.findByLoginId(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
+
+        loginUser.setName(user.getName());
+        loginUser.setPhoneNum(user.getPhoneNum());
+        loginUser.setGender(user.getGender());
+
+
+        userRepository.save(loginUser);
+
+
+        return "redirect:/match";
+    }
 
 }
