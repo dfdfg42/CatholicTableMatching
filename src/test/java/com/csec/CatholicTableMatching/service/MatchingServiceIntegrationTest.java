@@ -26,7 +26,7 @@ public class MatchingServiceIntegrationTest {
     private MatchRepository matchRepository;
 
     @Test
-    @Transactional
+    //@Transactional
     public void testCreateMatch() {
         // Arrange
         User user1 = new User();
@@ -53,8 +53,12 @@ public class MatchingServiceIntegrationTest {
         potentialMatch.setMatchForm(matchForm2);
         userRepository.save(potentialMatch);
 
+
+
         // Act
         Match result = matchingService.createMatch(user1);
+
+        matchRepository.save(result);
 
         // Assert
         assertNotNull(result, "The match result should not be null.");
