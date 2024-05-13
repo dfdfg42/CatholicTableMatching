@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class MatchingServiceIntegrationTest {
@@ -26,7 +25,7 @@ public class MatchingServiceIntegrationTest {
     private MatchRepository matchRepository;
 
     @Test
-    @Transactional
+    //@Transactional
     public void testCreateMatch() {
         // Arrange
         User user1 = new User();
@@ -53,12 +52,17 @@ public class MatchingServiceIntegrationTest {
         potentialMatch.setMatchForm(matchForm2);
         userRepository.save(potentialMatch);
 
+
+
         // Act
         Match result = matchingService.createMatch(user1);
+
+        matchRepository.save(result);
 
         // Assert
         assertNotNull(result, "The match result should not be null.");
         assertTrue(result.getUser1().isMatched(), "User1 should be marked as matched.");
         assertTrue(result.getUser2().isMatched(), "User2 should be marked as matched.");
+        assertEquals(matchRepository.findAll().size(), 1, "Match not maked.");
     }
 }
