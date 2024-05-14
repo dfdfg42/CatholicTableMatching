@@ -1,0 +1,90 @@
+@font-face {
+    font-family: 'retro';
+    src: url("/fonts/DungGeunMo.eot"); /* IE9 Compat Modes */
+    src: url("/fonts/DungGeunMo.eot?#iefix") format('embedded-opentype'), /* IE6-IE8 */
+    url("/fonts/DungGeunMo.woff2") format('woff2'), /* Super Modern Browsers */
+    url("/fonts/DungGeunMo.woff") format('woff'); /* Pretty Modern Browsers */
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'retro', sans-serif;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    font-size: 20px; /* Slightly larger base font */
+}
+
+.form-container {
+    text-align: left;
+    max-width: 350px; /* Increased width */
+    width: 100%;
+    height: auto;
+    padding: 25px; /* Larger padding for container */
+    margin: auto;
+    font-size: 18px; /* Increased font size */
+    background-color: white;
+}
+
+.title, .nes-field label {
+    font-size: 18px; /* Larger title and label fonts */
+    margin-bottom: 10px;
+}
+
+.nes-input {
+    margin-bottom: 15px; /* Larger margin between form fields */
+}
+
+.nes-btn {
+    font-size: 18px; /* Slightly larger button font size */
+}
+
+.button-center {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Larger margin above button */
+}
+
+.nes-radio-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px; /* Reduced margin between radio group and checkbox */
+}
+
+.nes-radio-group label {
+    margin-right: 25px;
+    font-size: 18px; /* Increased radio option font size */
+}
+
+
+
+.nes-checkbox {
+    vertical-align: middle;
+    margin-left: auto; /* Adjust this value to move the checkbox to the left */
+
+}
+
+.nes-checkbox + span {
+    vertical-align: middle;
+    margin-left: 8px; /* Adjust this value to move the text closer to the checkbox */
+    margin-top: 4px;
+}
+
+
+dialog {
+    width: 70%; /* Increase dialog width */
+    max-width: 600px; /* Set a max width */
+}
+
+.dialog-menu {
+    display: flex;
+    justify-content: center; /* Center the button horizontally */
+    padding: 0;
+}
+
+.dialog-menu button {
+    margin: auto; /* Center the button inside the menu */
+}

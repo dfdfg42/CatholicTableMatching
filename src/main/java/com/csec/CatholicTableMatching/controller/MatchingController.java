@@ -39,9 +39,18 @@ public class MatchingController {
 
     @GetMapping("/match")
     @PreAuthorize("isAuthenticated()")
-    public String MatchStart(@ModelAttribute User user , Model model){
-        model.addAttribute("matchForm", new MatchForm());
-        return "match_form_nes";
+    public String MatchStart(@AuthenticationPrincipal PrincipalDetails userDetails,@ModelAttribute User user , Model model){
+        User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
+                () -> new RuntimeException());
+         if (loginUser.getPhoneNum() == null) {
+            return "redirect:/userinfo";
+        }else if(loginUser.getMatchForm() != null){
+             return "redirect:/matching";
+        }
+        else{
+             model.addAttribute("matchForm", new MatchForm());
+             return "match_form_nes";
+         }
     } // 매치 폼 화면이동
 
     @PostMapping("/match")
@@ -91,10 +100,15 @@ public class MatchingController {
     public String userInfo(@AuthenticationPrincipal PrincipalDetails userDetails, @ModelAttribute User user){
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
-        if (loginUser.getPhoneNum() == null) {
+       /* if (loginUser.getPhoneNum() == null) {
             return "user_form";
         }
-        return "redirect:/match";
+        return "redirect:/match";*/
+
+        user.setName(loginUser.getName());
+        user.setPhoneNum(loginUser.getPhoneNum());
+        user.setGender(loginUser.getGender());
+        return "user_form";
     }
 
     @PreAuthorize("isAuthenticated()")
