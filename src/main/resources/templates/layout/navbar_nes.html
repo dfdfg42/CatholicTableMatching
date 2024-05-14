@@ -104,6 +104,15 @@
             padding: 8px 10px; /* 내부 여백 변경 */
             margin-bottom: 12px;
         }
+        .dialog-menu {
+            display: flex;
+            justify-content: center; /* Center the button horizontally */
+            padding: 0;
+        }
+
+        .dialog-menu button {
+            margin: auto; /* Center the button inside the menu */
+        }
     </style>
 
 </head>
@@ -124,10 +133,10 @@
         <a href="#">매칭현황</a>
 
         <section>
-            <button type="button" class="nes-btn is-primary" onclick="document.getElementById('dialog-rounded').showModal();">
+            <button type="button" class="nes-btn is-primary" onclick="document.getElementById('dialog-rounded-maker').showModal();">
                 제작자 정보
             </button>
-            <dialog class="nes-dialog is-rounded" id="dialog-rounded" style="width: 80%;">
+            <dialog class="nes-dialog is-rounded" id="dialog-rounded-maker" style="width: 80%;">
                 <form method="dialog">
                     <p class="title">반가워용</p>
                     <p>CESC <i class="nes-icon instagram is-small"></i></p>

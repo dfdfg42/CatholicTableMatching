@@ -43,7 +43,7 @@
             margin-bottom: 10px;
         }
 
-        .nes-select, .nes-input {
+        .nes-input {
             margin-bottom: 15px; /* Larger margin between form fields */
         }
 
@@ -61,13 +61,48 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px; /* Reduced margin between radio group and checkbox */
         }
 
         .nes-radio-group label {
             margin-right: 25px;
             font-size: 18px; /* Increased radio option font size */
         }
+
+
+
+        .nes-checkbox {
+            vertical-align: middle;
+            margin-left: auto; /* Adjust this value to move the checkbox to the left */
+
+        }
+
+        .nes-checkbox + span {
+            vertical-align: middle;
+            margin-left: 8px; /* Adjust this value to move the text closer to the checkbox */
+            margin-top: 4px;
+        }
+
+
+        dialog {
+            width: 70%; /* Increase dialog width */
+            max-width: 600px; /* Set a max width */
+        }
+
+        .dialog-menu {
+            display: flex;
+            justify-content: center; /* Center the button horizontally */
+            padding: 0;
+        }
+
+        .dialog-menu button {
+            margin: auto; /* Center the button inside the menu */
+        }
+
+
+
+
+
     </style>
 </head>
 <body>
@@ -80,7 +115,7 @@
             사용자 정보
         </span>
     </p>
-    <form th:action="@{/userinfo}" th:object="${user}" method="post">
+    <form id="userForm" th:action="@{/userinfo}" th:object="${user}" method="post">
         <!-- 사용자 이름 입력 -->
         <div class="nes-field">
             <label for="userName">이름</label>
@@ -96,21 +131,45 @@
             <label>성별</label>
             <div class="nes-radio-group" style="background-color:#212529; padding: 1.5rem 0;">
                 <label>
-                    <input type="radio" th:field="*{gender}" value="남" class="nes-radio is-dark" name="gender" />
+                    <input type="radio" th:field="*{gender}" value="남" class="nes-radio is-dark" name="gender" required />
                     <span>남</span>
                 </label>
                 <label>
-                    <input type="radio" th:field="*{gender}" value="여" class="nes-radio is-dark" name="gender" />
+                    <input type="radio" th:field="*{gender}" value="여" class="nes-radio is-dark" name="gender" required />
                     <span>여</span>
                 </label>
             </div>
         </div>
+        <!-- 개인정보 동의 체크박스 -->
+        <div class="nes-field" style="margin-top: 10px;">
+            <label style="display: flex; align-items: center;">
+                <input type="checkbox" id="agreement" class="nes-checkbox" required />
+                <span style="margin-left: 8px;">개인정보 처리방침에 동의합니다</span>
+            </label>
+        </div>
+        <!-- 개인정보 동의 내용 버튼 -->
+        <div class="button-center">
+            <button type="button" class="nes-btn is-primary" onclick="document.getElementById('dialog-rounded-usercheck').showModal();">
+                개인정보 동의 창
+            </button>
+        </div>
         <!-- 저장하기 버튼 -->
         <div class="button-center">
-            <button type="submit" class="nes-btn is-error">저장하기</button>
+            <button type="submit" id="submitBtn" class="nes-btn is-error">저장하기</button>
         </div>
     </form>
 </div>
+
+<!-- 개인정보 동의 내용 다이얼로그 -->
+<dialog class="nes-dialog is-rounded usercheck" id="dialog-rounded-usercheck">
+    <form method="dialog">
+        <p class="title">개인정보 동의 창</p>
+        <p>개인정보 동의 내용</p>
+        <menu class="dialog-menu" >
+            <button type="button" class="nes-btn is-primary" onclick="document.getElementById('dialog-rounded-usercheck').close();">확인</button>
+        </menu>
+    </form>
+</dialog>
 
 </body>
 </html>
