@@ -6,6 +6,7 @@ import com.csec.CatholicTableMatching.repository.MatchFormRepository;
 import com.csec.CatholicTableMatching.security.domain.User;
 import com.csec.CatholicTableMatching.security.oauth.PrincipalDetails;
 import com.csec.CatholicTableMatching.security.repository.UserRepository;
+import com.csec.CatholicTableMatching.security.service.EncryptService;
 import com.csec.CatholicTableMatching.service.MatchingService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,8 @@ public class MatchingController {
     private final UserRepository userRepository;
 
     private final MatchFormRepository matchFormRepository;
+
+    private final EncryptService encryptService;
 
     private MatchForm matchForm;
 
@@ -106,7 +109,7 @@ public class MatchingController {
 
 
         loginUser.setName(user.getName());
-        loginUser.setPhoneNum(user.getPhoneNum());
+        loginUser.setPhoneNum(encryptService.encrypt(user.getPhoneNum())); // 전화번호 암호화 저장
         loginUser.setGender(user.getGender());
 
 
