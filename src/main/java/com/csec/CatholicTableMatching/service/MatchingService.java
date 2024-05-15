@@ -22,7 +22,7 @@ public class MatchingService {
     private final MatchFormRepository matchFormRepository;
 
     @Transactional
-    public List<Match> createMatchForAllUsers() {
+    public void createMatchForAllUsers() {
         List<User> users = userRepository.findAllByMatchedFalse();
         List<Match> matches = new ArrayList<>();
         for (User user : users) {
@@ -31,7 +31,7 @@ public class MatchingService {
                 matches.add(match);
             }
         }
-        return matches; // 모든 매치 결과 반환
+      /*  return matches; // 모든 매치 결과 반환*/
     }
 
     @Transactional
@@ -42,12 +42,8 @@ public class MatchingService {
 
         for (User potentialMatch : potentialMatches) {
             if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId())) {
-                Match match = new Match();
-                match.setUser1(user);
-                match.setUser2(potentialMatch);
-                match.setMatchDate(new Date());
-                match.setTimeSlot(matchForm.getTimeSlot());
-                match.setFoodType(matchForm.getFoodType());
+                Match match = new Match(user,potentialMatch,new Date(),matchForm.getTimeSlot(),matchForm.getFoodType());
+
 
                 potentialMatch.setMatched(true);
                 user.setMatched(true);
@@ -58,6 +54,12 @@ public class MatchingService {
             }
         }
         return null; // No match found
+    }
+
+    @Transactional
+    public List<Match> MatchResult(){
+        List<Match> matches = matchRepository.findAll();
+        return matches;
     }
 
 

@@ -3,15 +3,16 @@ package com.csec.CatholicTableMatching.controller;
 import com.csec.CatholicTableMatching.domain.Match;
 import com.csec.CatholicTableMatching.domain.MatchForm;
 import com.csec.CatholicTableMatching.repository.MatchFormRepository;
+import com.csec.CatholicTableMatching.repository.MatchRepository;
 import com.csec.CatholicTableMatching.security.domain.User;
 import com.csec.CatholicTableMatching.security.oauth.PrincipalDetails;
 import com.csec.CatholicTableMatching.security.repository.UserRepository;
 import com.csec.CatholicTableMatching.security.service.EncryptService;
 import com.csec.CatholicTableMatching.service.MatchingService;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -81,11 +81,13 @@ public class MatchingController {
 
     //전체 매칭한 결과 페이지
     @GetMapping("/matchResult")
-    @PreAuthorize("isAuthenticated()")
+/*    @PreAuthorize("isAuthenticated()")*/
     public String findAllMatches(Model model) {
-        List<Match> matches = matchingService.createMatchForAllUsers();
+        matchingService.createMatchForAllUsers();
+        List<Match> matches = matchingService.MatchResult();
         model.addAttribute("matches", matches);
-        return "match_Results";  // 매칭 결과 페이지 뷰 이름
+        System.out.println(matches);
+        return "match_results";  // 매칭 결과 페이지 뷰 이름
     }
 
     @PreAuthorize("isAuthenticated()") // todo 사용자 id와 인증한 주체의 id가 동일한지도 검사 필요
@@ -103,14 +105,13 @@ public class MatchingController {
     public String userInfo(@AuthenticationPrincipal PrincipalDetails userDetails, @ModelAttribute User user){
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
-       /* if (loginUser.getPhoneNum() == null) {
-            return "user_form";
-        }
-        return "redirect:/match";*/
 
-        user.setName(loginUser.getName());
-        user.setPhoneNum(loginUser.getPhoneNum());
-        user.setGender(loginUser.getGender());
+
+        if (loginUser.getPhoneNum() ==null){
+            user.updateUserInfo(loginUser.getName(),loginUser.getGender(), loginUser.getPhoneNum() );
+        }else{
+        user.updateUserInfo(loginUser.getName(),loginUser.getGender(), encryptService.decrypt(loginUser.getPhoneNum()));
+        }
         return "user_form";
     }
 
@@ -121,16 +122,32 @@ public class MatchingController {
         User loginUser = userRepository.findByLoginId(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-
-        loginUser.setName(user.getName());
-        loginUser.setPhoneNum(encryptService.encrypt(user.getPhoneNum())); // 전화번호 암호화 저장
-        loginUser.setGender(user.getGender());
-
+        loginUser.updateUserInfo(user.getName(),user.getGender(), encryptService.encrypt(user.getPhoneNum()));
 
         userRepository.save(loginUser);
 
 
         return "redirect:/match";
+    }
+
+    private final MatchRepository matchRepository;
+    @PostConstruct
+    @Transactional
+    public void testCreateMatch() {
+        // Arrange
+        User user1 = new User("user1", "user1","M","01012341234" , false);
+        MatchForm matchForm1 = new MatchForm(user1,"Italian","Evening","F");
+        user1.setMatchForm(matchForm1);
+        userRepository.save(user1);
+
+        User potentialMatch = new User("user2","user2","F","01012341234" , false);
+        MatchForm matchForm2 = new MatchForm(potentialMatch,"Italian","Evening","F");
+        potentialMatch.setMatchForm(matchForm2);
+        userRepository.save(potentialMatch);
+
+        matchingService.createMatchForAllUsers();
+
+
     }
 
 }

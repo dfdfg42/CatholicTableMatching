@@ -28,4 +28,16 @@ public class Match {
     private String foodType;
 
     // Other fields and methods
+
+
+    public Match(User user1, User user2, Date matchDate, String timeSlot, String foodType) {
+        this.user1 = user1;
+        this.user2 = user2;
+        this.matchDate = matchDate;
+        this.timeSlot = timeSlot;
+        this.foodType = foodType;
+    }
+
+    public Match() {
+    }
 }

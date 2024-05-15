@@ -21,4 +21,12 @@ public class MatchForm{
     private String timeSlot;
     private String preferGender;
 
+    public MatchForm(){
+    }
+    public MatchForm(User user, String foodType, String timeSlot, String preferGender) {
+        this.user = user;
+        this.foodType = foodType;
+        this.timeSlot = timeSlot;
+        this.preferGender = preferGender;
+    }
 }
