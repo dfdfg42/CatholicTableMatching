@@ -26,9 +26,11 @@ public class MatchingService {
         List<User> users = userRepository.findAllByMatchedFalse();
         List<Match> matches = new ArrayList<>();
         for (User user : users) {
-            Match match = createMatch(user);
-            if (match != null) {
-                matches.add(match);
+            if(!user.isMatched()){
+                Match match = createMatch(user);
+                if (match != null) {
+                    matches.add(match);
+                }
             }
         }
       /*  return matches; // 모든 매치 결과 반환*/
