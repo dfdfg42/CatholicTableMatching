@@ -40,6 +40,7 @@ public class MessageController {
         }
         sendUserDetailsToEachOther(match);
         match.setSended(true);
+        matchRepository.save(match);
         return "redirect:/matchResult";
     }
 
@@ -51,6 +52,7 @@ public class MessageController {
             if(!match.isSended()){
                 sendUserDetailsToEachOther(match);
                 match.setSended(true);
+                matchRepository.save(match);
             }
         }
         return "redirect:/matchResult";
