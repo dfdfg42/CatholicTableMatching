@@ -6,111 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Navigation Example</title>
     <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet" />
-    <nav th:fragment="navbarnes">
-    <style>
-        @font-face {
-            font-family: 'retro';
-            src: url("/Myfont/DungGeunMo.eot");
-            src: url("/Myfont/DungGeunMo.eot?#iefix") format('embedded-opentype'),
-            url("/Myfont/DungGeunMo.woff2") format('woff2'),
-            url("/Myfont/DungGeunMo.woff") format('woff');
-            font-weight: normal;
-            font-style: normal;
-        }
+    <link href="/css/navbar_style.css" rel="stylesheet" /> <!-- 분리된 CSS 파일을 참조 -->
 
-        body {
-            font-family: 'retro', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #ded199;
-            padding: 10px 20px;
-            z-index: 1000;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-        }
-
-        .navbar a.nes-btn {
-            padding: 2px 10px; /* Adjust this to control vertical padding */
-            text-decoration: none;
-        }
-
-        .hamburger-menu {
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .bar {
-            height: 3px;
-            width: 20px;
-            background-color: white;
-            margin: 3px 0;
-        }
-
-        .user-greeting {
-            display: flex;
-            align-items: center;
-        }
-
-        .menu-panel {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 0;
-            height: 100vh;
-            background-color: #525f69;
-            overflow: hidden;
-            transition: 0.5s;
-            padding-top: 67px;
-            z-index: 500;
-        }
-
-        .menu-panel a {
-            padding: 10px 15px;
-            text-decoration: none;
-            font-size: 18px;
-            color: white;
-            display: block;
-            transition: 0.3s;
-        }
-
-        .menu-panel a:hover {
-            color: #f4f4f4;
-            background: #ded199;
-        }
-        .menu-panel section {
-            margin-top: auto; /* 버튼을 메뉴의 맨 아래로 밀어붙임 */
-            width: 100%; /* 섹션의 폭을 메뉴 패널에 맞춤 */
-            text-align: center; /* 버튼을 센터 정렬 */
-        }
-
-        .menu-panel {
-            display: flex;
-            flex-direction: column; /* 메뉴 항목들을 세로로 정렬 */
-            justify-content: space-between; /* 링크와 섹션 간 간격 조정 */
-        }
-        .nes-btn.is-primary {
-            color: #ffffff; /* 글자 색상 변경 */
-            padding: 8px 10px; /* 내부 여백 변경 */
-            margin-bottom: 12px;
-        }
-    </style>
 
 </head>
 <body>
-
+    <nav th:fragment="navbarnes">
     <div class="navbar">
-        <a class="nes-btn" href="#">만냠</a>
+        <a class="nes-btn" href="">만냠</a>
         <div>
             <div class="hamburger-menu" onclick="toggleMenu()">
                 <i class="nes-logo"></i>
@@ -119,15 +22,16 @@
     </div>
 
     <div id="myNav" class="menu-panel">
-        <a href="#">내 정보수정</a>
-        <a href="#">매칭하기</a>
+        <a href="/userinfo">내 정보수정</a>
+        <a href="/match">매칭하기</a>
         <a href="#">매칭현황</a>
+        <a href="#">이용방법</a>
 
         <section>
-            <button type="button" class="nes-btn is-primary" onclick="document.getElementById('dialog-rounded').showModal();">
+            <button type="button" class="nes-btn is-primary" onclick="document.getElementById('dialog-rounded-maker').showModal();">
                 제작자 정보
             </button>
-            <dialog class="nes-dialog is-rounded" id="dialog-rounded" style="width: 80%;">
+            <dialog class="nes-dialog is-rounded" id="dialog-rounded-maker" style="width: 80%;">
                 <form method="dialog">
                     <p class="title">반가워용</p>
                     <p>CESC <i class="nes-icon instagram is-small"></i></p>
