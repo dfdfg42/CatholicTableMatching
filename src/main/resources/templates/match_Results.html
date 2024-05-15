@@ -11,11 +11,12 @@
     <h2>매칭 결과</h2>
     <div th:each="match : ${matches}">
         <p th:text="'매칭 상대: ' + ${match.user2.name} + ', 음식 종류: ' + ${match.foodType} + ', 시간: ' + ${match.timeSlot}"></p>
+        <p th:text="'유저1: ' + ${match.user1.name} + ', 유저2: ' + ${match.user2.name}"></p>
     </div>
 </div>
 
 <h1>매칭을 시작하세요</h1>
-<form th:action="@{/matching}" method="get">
+<form th:action="@{/matchResult}" method="get">
     <button type="submit">매칭 시작</button>
 </form>
 </body>
