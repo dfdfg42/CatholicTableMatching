@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'retro';
+    src: url("/fonts/DungGeunMo.eot"); /* IE9 Compat Modes */
+    src: url("/fonts/DungGeunMo.eot?#iefix") format('embedded-opentype'), /* IE6-IE8 */
+    url("/fonts/DungGeunMo.woff2") format('woff2'), /* Super Modern Browsers */
+    url("/fonts/DungGeunMo.woff") format('woff'); /* Pretty Modern Browsers */
+    font-weight: normal;
+    font-style: normal;
+    /*
+    기본경로가 static 작업할땐 ../static 배포할땐 지우고 배포하자
+     */
+}
+
+/* 모든 텍스트에 적용 */
+body {
+    font-family: 'retro', sans-serif;
+    font-size: 15px;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+.container {
+    margin-top: 50px;
+    text-align: center;
+}
+.matches-container {
+    margin-bottom: 20px;
+}
+.match {
+    background-color: #fff;
+    border: 2px solid #000;
+    padding: 10px;
+    margin: auto;
+}
+.form-container {
+    display: inline-block;
+    text-align: left;
+}
+.user-info {
+    display: flex;
+    justify-content: space-between;
+}
