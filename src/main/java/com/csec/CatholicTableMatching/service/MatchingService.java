@@ -43,7 +43,7 @@ public class MatchingService {
                 matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender(), false);
 
         for (User potentialMatch : potentialMatches) {
-            if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId())) {
+            if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId()) &&!potentialMatch.getGender().equals(user.getGender()) ) {
                 Match match = new Match(user,potentialMatch,new Date(),matchForm.getTimeSlot(),matchForm.getFoodType());
 
                 potentialMatch.setMatched(true);

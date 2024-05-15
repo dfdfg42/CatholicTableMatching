@@ -137,11 +137,20 @@ public class MatchingController {
     @PostConstruct
     @Transactional
     public void testCreateMatch() {
-        Random random = new Random();
+        User userko = new User("123", "고경우", "M", "01039077292", false);
+        User userkim = new User("776", "김준형", "F", "01031338397", false);
+        MatchForm matchFormko = new MatchForm(userko, "한식", "evening", "F");
+        MatchForm matchFormkim = new MatchForm(userko, "한식", "evening", "F");
+        userko.setMatchForm(matchFormko);
+        userkim.setMatchForm(matchFormkim);
+        userRepository.save(userko);
+        userRepository.save(userkim);
+
+        /*Random random = new Random();
         List<String> foodTypes = Arrays.asList("한식", "일식", "양식", "중식");
         List<String> timeSlots = Arrays.asList("Lunch", "Evening");
 
-        IntStream.rangeClosed(1, 100).forEach(i -> {
+        IntStream.rangeClosed(1, 15).forEach(i -> {
             String userName = "user" + i;
             String gender = i % 2 == 0 ? "F" : "M"; // 짝수는 여성, 홀수는 남성
             String phoneNum = "0101234123" + i;
@@ -162,7 +171,7 @@ public class MatchingController {
 
             // User 저장
             userRepository.save(user);
-        });
+        });*/
     }
 }
 
