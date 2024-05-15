@@ -27,6 +27,8 @@ public class Match {
 
     private String foodType;
 
+    private boolean sended = false;
+
     // Other fields and methods
 
 

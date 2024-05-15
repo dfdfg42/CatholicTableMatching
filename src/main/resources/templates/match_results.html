@@ -24,12 +24,13 @@
                 <p th:text="'유저1: ' + ${match.user1.name} + ' ' + ${match.user1.getGender()}"></p>
                 <p th:text="'유저2: ' + ${match.user2.name} + ' ' + ${match.user2.getGender()}"></p>
             </div>
+            <p th:if="${match.sended}" class="nes-text is-success">문자 발송됨</p>
+            <p th:if="${!match.sended}" class="nes-text is-error">문자 미발송</p>
             <form th:action="@{/api/message/sendSms/{matchId}(matchId=${match.getId()})}" method="post">
-                <button type="submit" class="nes-btn is-primary">문자 발송</button>
+                <button type="submit" class="nes-btn is-primary" th:disabled="${match.sended}">문자 발송</button>
             </form>
         </div>
     </div>
-
     <h1 class="nes-text is-primary">매칭을 시작하세요</h1>
     <div class="form-container">
         <form th:action="@{/matchResult}" method="get">

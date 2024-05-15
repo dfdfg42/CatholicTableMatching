@@ -35,17 +35,25 @@ public class MessageController {
     @PostMapping("/sendSms/{matchId}")
     public String sendSms(@PathVariable Long matchId) {
         Match match = matchRepository.findById(matchId).orElseThrow(() -> new RuntimeException("Match not found"));
+        if(!match.isSended()){
+            sendUserDetailsToEachOther(match);
+        }
         sendUserDetailsToEachOther(match);
-        return "/matchResult";
+        match.setSended(true);
+        return "redirect:/matchResult";
     }
 
     @PostMapping("/sendAllSms")
     public String sendAllSms() {
         List<Match> matches = matchRepository.findAll();
+
         for (Match match : matches) {
-            sendUserDetailsToEachOther(match);
+            if(!match.isSended()){
+                sendUserDetailsToEachOther(match);
+                match.setSended(true);
+            }
         }
-        return "/matchResult";
+        return "redirect:/matchResult";
     }
 
     private void sendUserDetailsToEachOther(Match match) {
