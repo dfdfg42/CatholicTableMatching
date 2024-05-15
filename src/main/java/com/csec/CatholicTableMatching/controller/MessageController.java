@@ -36,7 +36,7 @@ public class MessageController {
     public String sendSms(@PathVariable Long matchId) {
         Match match = matchRepository.findById(matchId).orElseThrow(() -> new RuntimeException("Match not found"));
         sendUserDetailsToEachOther(match);
-        return "redirect:/matchResult";
+        return "/matchResult";
     }
 
     @PostMapping("/sendAllSms")
@@ -45,7 +45,7 @@ public class MessageController {
         for (Match match : matches) {
             sendUserDetailsToEachOther(match);
         }
-        return "redirect:/matchResult";
+        return "/matchResult";
     }
 
     private void sendUserDetailsToEachOther(Match match) {
@@ -53,13 +53,13 @@ public class MessageController {
         String user2Phone = match.getUser2().getPhoneNum();
 
         String user1Message = String.format("매칭된 유저 정보: \n이름: %s\n성별: %s\n전화번호: %s",
-                match.getUser2().getName(), match.getUser2().getGender(), encryptService.decrypt(match.getUser2().getPhoneNum()));
+                match.getUser2().getName(), match.getUser2().getGender(), match.getUser2().getPhoneNum());
 
         String user2Message = String.format("매칭된 유저 정보: \n이름: %s\n성별: %s\n전화번호: %s",
-                match.getUser1().getName(), match.getUser1().getGender(), encryptService.decrypt(match.getUser1().getPhoneNum()));
+                match.getUser1().getName(), match.getUser1().getGender(), match.getUser1().getPhoneNum());
 
-        sendMessageService.sendMessage("만냠 - 밥 같이 먹을 사람 찾기", user1Phone, user1Message);
-        sendMessageService.sendMessage("만냠 - 밥 같이 먹을 사람 찾기", user2Phone, user2Message);
+        sendMessageService.sendMessage("01039077292", user1Phone, user1Message);
+        sendMessageService.sendMessage("01039077292", user2Phone, user2Message);
     }
 
 
