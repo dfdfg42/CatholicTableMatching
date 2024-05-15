@@ -23,7 +23,7 @@ public class MatchingService {
 
     @Transactional
     public void createMatchForAllUsers() {
-        List<User> users = userRepository.findAllByMatchedFalse();
+        List<User> users = userRepository.findAll();
         List<Match> matches = new ArrayList<>();
         for (User user : users) {
             if(!user.isMatched()){

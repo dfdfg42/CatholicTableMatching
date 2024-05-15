@@ -19,7 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 @Controller
@@ -135,6 +137,9 @@ public class MatchingController {
     @PostConstruct
     @Transactional
     public void testCreateMatch() {
+        Random random = new Random();
+        List<String> foodTypes = Arrays.asList("한식", "일식", "양식", "중식");
+        List<String> timeSlots = Arrays.asList("Lunch", "Evening");
 
         IntStream.rangeClosed(1, 100).forEach(i -> {
             String userName = "user" + i;
@@ -145,8 +150,12 @@ public class MatchingController {
             // User 객체 생성
             User user = new User(userName, userName, gender, phoneNum, matched);
 
+            // 랜덤으로 foodType과 timeSlot 선택
+            String foodType = foodTypes.get(random.nextInt(foodTypes.size()));
+            String timeSlot = timeSlots.get(random.nextInt(timeSlots.size()));
+
             // MatchForm 객체 생성
-            MatchForm matchForm = new MatchForm(user, "Italian", "Evening", "F");
+            MatchForm matchForm = new MatchForm(user, foodType, timeSlot, "F");
 
             // User와 MatchForm 연결
             user.setMatchForm(matchForm);
