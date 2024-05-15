@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Controller
 @RequiredArgsConstructor
@@ -130,24 +131,29 @@ public class MatchingController {
         return "redirect:/match";
     }
 
-    private final MatchRepository matchRepository;
+
     @PostConstruct
     @Transactional
     public void testCreateMatch() {
-        // Arrange
-        User user1 = new User("user1", "user1","M","01012341234" , false);
-        MatchForm matchForm1 = new MatchForm(user1,"Italian","Evening","F");
-        user1.setMatchForm(matchForm1);
-        userRepository.save(user1);
 
-        User potentialMatch = new User("user2","user2","F","01012341234" , false);
-        MatchForm matchForm2 = new MatchForm(potentialMatch,"Italian","Evening","F");
-        potentialMatch.setMatchForm(matchForm2);
-        userRepository.save(potentialMatch);
+        IntStream.rangeClosed(1, 10).forEach(i -> {
+            String userName = "user" + i;
+            String gender = i % 2 == 0 ? "F" : "M"; // 짝수는 여성, 홀수는 남성
+            String phoneNum = "0101234123" + i;
+            boolean matched = false;
 
-        matchingService.createMatchForAllUsers();
+            // User 객체 생성
+            User user = new User(userName, userName, gender, phoneNum, matched);
 
+            // MatchForm 객체 생성
+            MatchForm matchForm = new MatchForm(user, "Italian", "Evening", "F");
 
+            // User와 MatchForm 연결
+            user.setMatchForm(matchForm);
+
+            // User 저장
+            userRepository.save(user);
+        });
     }
-
 }
+
