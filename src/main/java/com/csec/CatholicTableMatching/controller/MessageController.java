@@ -9,11 +9,12 @@ import com.csec.CatholicTableMatching.service.MatchingService;
 import com.csec.CatholicTableMatching.service.SendMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/api/message")
 @RequiredArgsConstructor
 public class MessageController {
@@ -23,28 +24,27 @@ public class MessageController {
     private final MatchRepository matchRepository;
 
 
-
-    @PostMapping("/send")
-    public void sendMessage(
+    @GetMapping("/send")
+    public String sendMessage(
             @RequestParam String from,
             @RequestParam String to,
             @RequestParam String text) {
         sendMessageService.sendMessage(from, to, text);
+        return "redirect:/matchResult";
     }
 
-    @PostMapping("/sendSms/{matchId}")
+    @GetMapping("/sendSms/{matchId}")
     public String sendSms(@PathVariable Long matchId) {
         Match match = matchRepository.findById(matchId).orElseThrow(() -> new RuntimeException("Match not found"));
         if(!match.isSended()){
             sendUserDetailsToEachOther(match);
         }
-        sendUserDetailsToEachOther(match);
         match.setSended(true);
         matchRepository.save(match);
         return "redirect:/matchResult";
     }
 
-    @PostMapping("/sendAllSms")
+    @GetMapping("/sendAllSms")
     public String sendAllSms() {
         List<Match> matches = matchRepository.findAll();
 
@@ -59,14 +59,14 @@ public class MessageController {
     }
 
     private void sendUserDetailsToEachOther(Match match) {
-        String user1Phone = match.getUser1().getPhoneNum();
-        String user2Phone = match.getUser2().getPhoneNum();
+        String user1Phone = encryptService.decrypt(match.getUser1().getPhoneNum());
+        String user2Phone = encryptService.decrypt(match.getUser2().getPhoneNum());
 
-        String user1Message = String.format("매칭된 유저 정보: \n이름: %s\n성별: %s\n전화번호: %s",
-                match.getUser2().getName(), match.getUser2().getGender(), match.getUser2().getPhoneNum());
+        String user1Message = String.format("만냠-같이 밥먹을 사람 구하기\n 매칭된 정보가 도착했습니다: \n이름: %s\n성별: %s\n전화번호: %s",
+                match.getUser2().getName(), match.getUser2().getGender(), user1Phone);
 
-        String user2Message = String.format("매칭된 유저 정보: \n이름: %s\n성별: %s\n전화번호: %s",
-                match.getUser1().getName(), match.getUser1().getGender(), match.getUser1().getPhoneNum());
+        String user2Message = String.format("만냠-같이 밥먹을 사람 구하기\n 매칭된 정보가 도착했습니다: \n이름: %s\n성별: %s\n전화번호: %s",
+                match.getUser1().getName(), match.getUser1().getGender(), user1Phone);
 
         sendMessageService.sendMessage("01039077292", user1Phone, user1Message);
         sendMessageService.sendMessage("01039077292", user2Phone, user2Message);
