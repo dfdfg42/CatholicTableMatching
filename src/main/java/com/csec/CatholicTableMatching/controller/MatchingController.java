@@ -136,7 +136,7 @@ public class MatchingController {
     @Transactional
     public void testCreateMatch() {
 
-        IntStream.rangeClosed(1, 30).forEach(i -> {
+        IntStream.rangeClosed(1, 100).forEach(i -> {
             String userName = "user" + i;
             String gender = i % 2 == 0 ? "F" : "M"; // 짝수는 여성, 홀수는 남성
             String phoneNum = "0101234123" + i;

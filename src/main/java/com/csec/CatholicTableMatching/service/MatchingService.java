@@ -46,7 +46,6 @@ public class MatchingService {
             if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId())) {
                 Match match = new Match(user,potentialMatch,new Date(),matchForm.getTimeSlot(),matchForm.getFoodType());
 
-
                 potentialMatch.setMatched(true);
                 user.setMatched(true);
 
@@ -63,7 +62,6 @@ public class MatchingService {
         List<Match> matches = matchRepository.findAll();
         return matches;
     }
-
 
 }
 
