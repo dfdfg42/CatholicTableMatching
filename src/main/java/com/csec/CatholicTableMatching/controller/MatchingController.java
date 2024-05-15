@@ -3,6 +3,7 @@ package com.csec.CatholicTableMatching.controller;
 import com.csec.CatholicTableMatching.domain.Match;
 import com.csec.CatholicTableMatching.domain.MatchForm;
 import com.csec.CatholicTableMatching.repository.MatchFormRepository;
+import com.csec.CatholicTableMatching.repository.MatchRepository;
 import com.csec.CatholicTableMatching.security.domain.User;
 import com.csec.CatholicTableMatching.security.oauth.PrincipalDetails;
 import com.csec.CatholicTableMatching.security.repository.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -103,13 +105,13 @@ public class MatchingController {
     public String userInfo(@AuthenticationPrincipal PrincipalDetails userDetails, @ModelAttribute User user){
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
-       /* if (loginUser.getPhoneNum() == null) {
-            return "user_form";
-        }
-        return "redirect:/match";*/
 
         user.setName(loginUser.getName());
-        user.setPhoneNum(loginUser.getPhoneNum());
+        if (loginUser.getPhoneNum() ==null){
+            user.setPhoneNum(loginUser.getPhoneNum());
+        }else {
+            user.setPhoneNum(encryptService.decrypt(loginUser.getPhoneNum()));
+        }
         user.setGender(loginUser.getGender());
         return "user_form";
     }
@@ -133,4 +135,45 @@ public class MatchingController {
         return "redirect:/match";
     }
 
+
+
+    //더미 데이터
+   /* private final MatchRepository matchRepository;
+    @PostConstruct
+    @Transactional
+    public void testCreateMatch() {
+        // Arrange
+        User user1 = new User();
+        user1.setLoginId("user1");
+        user1.setGender("M");
+        user1.setMatched(false);
+        MatchForm matchForm1 = new MatchForm();
+        matchForm1.setFoodType("Italian");
+        matchForm1.setTimeSlot("Evening");
+        matchForm1.setPreferGender("F");
+        //matchFormRepository.save(matchForm1);
+        user1.setMatchForm(matchForm1);
+        userRepository.save(user1);
+
+        User potentialMatch = new User();
+        potentialMatch.setLoginId("user2");
+        potentialMatch.setGender("F");
+        potentialMatch.setMatched(false);
+        MatchForm matchForm2 = new MatchForm();
+        matchForm2.setFoodType("Italian");
+        matchForm2.setTimeSlot("Evening");
+        matchForm2.setPreferGender("F");
+        //matchFormRepository.save(matchForm2);
+        potentialMatch.setMatchForm(matchForm2);
+        userRepository.save(potentialMatch);
+
+
+
+        // Act
+        Match result = matchingService.createMatch(user1);
+
+        matchRepository.save(result);
+
+
+    }*/
 }
