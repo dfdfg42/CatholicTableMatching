@@ -2,6 +2,7 @@ package com.csec.CatholicTableMatching.security.config;
 
 import com.csec.CatholicTableMatching.security.oauth.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.reactive.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
