@@ -137,8 +137,12 @@ public class MatchingController {
     @PostConstruct
     @Transactional
     public void testCreateMatch() {
-        User userko = new User("123", "고경우", "M", "01039077292", false);
-        User userkim = new User("776", "김준형", "F", "01031338397", false);
+        String phone1 = new String("01039077292");
+        String phone2 = new String("01094069318");
+
+
+        User userko = new User("고경우", "123", "M", encryptService.encrypt(phone1), false);
+        User userkim = new User("이승원", "145", "F", encryptService.encrypt(phone2), false);
         MatchForm matchFormko = new MatchForm(userko, "한식", "evening", "F");
         MatchForm matchFormkim = new MatchForm(userko, "한식", "evening", "F");
         userko.setMatchForm(matchFormko);
