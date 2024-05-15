@@ -29,7 +29,7 @@
         <!-- 사용자 전화번호 입력 -->
         <div class="nes-field">
             <label for="phone">전화번호</label>
-            <input type="tel" id="phone" th:field="*{phoneNum}" class="nes-input is-warning" placeholder="010-1234-5678" pattern="^010-[0-9]{4}-[0-9]{4}$" title="010-1234-5678과 같은 형식으로 입력하세요" required>
+            <input type="tel" id="phone" th:field="*{phoneNum}" class="nes-input is-warning" placeholder="01012345678" pattern="^010[0-9]{4}[0-9]{4}$" title="01012345678과 같은 형식으로 입력하세요" required>
         </div>
         <!-- 성별 선택 -->
         <div class="nes-field">
@@ -68,13 +68,36 @@
 <!-- 개인정보 동의 내용 다이얼로그 -->
 <dialog class="nes-dialog is-rounded user_check" id="dialog-rounded-user_check">
     <form method="dialog">
-        <p class="title">개인정보 동의 창</p>
-        <p>개인정보 동의 내용</p>
-        <menu class="dialog-menu" >
+        <p class="title">개인정보 동의 내역</p>
+        <p>수집하는 개인정보 항목</p>
+        <p>
+            이름<br>
+            전화번호<br>
+            성별
+        </p>
+        <p>개인정보의 수집 및 이용 목적</p>
+        <p>
+            서비스 제공에 관한 계약 이행 및 서비스 제공에 따른 요금 정산<br>
+            회원 관리: 본인 확인, 개인 식별, 불만 처리 등
+        </p>
+        <p>개인정보의 보유 및 이용 기간</p>
+        <p>
+            수집된 개인정보는 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 다만, 관련 법령에 따라 일정 기간 동안 보관하여야 할 경우에는 그 기간 동안 안전하게 보관합니다.
+        </p>
+        <p>개인정보 제공</p>
+        <p>
+            회사는 원칙적으로 고객님의 개인정보를 외부에 제공하지 않습니다. 다만, 고객님의 동의가 있거나 법령의 규정에 의한 경우에는 예외로 합니다.
+        </p>
+        <p>동의를 거부할 권리 및 동의 거부에 따른 불이익</p>
+        <p>
+            고객님은 개인정보 제공 동의를 거부할 권리가 있습니다. 다만, 동의를 거부하실 경우 서비스 제공이 제한될 수 있습니다.
+        </p>
+        <menu class="dialog-menu">
             <button type="button" class="nes-btn is-primary" onclick="document.getElementById('dialog-rounded-user_check').close();">확인</button>
         </menu>
     </form>
 </dialog>
+
 
 </body>
 </html>
