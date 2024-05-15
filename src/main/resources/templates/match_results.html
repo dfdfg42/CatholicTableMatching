@@ -14,6 +14,7 @@
 <!-- 네비게이션 -->
 <nav th:replace="~{layout/navbar_nes :: navbarnes}"></nav>
 
+
 <div class="container">
     <!-- 매칭 결과 표시 -->
     <div class="nes-container with-title matches-container is-rounded" th:if="${matches}">
@@ -24,6 +25,9 @@
                 <p th:text="'유저1: ' + ${match.user1.name} + ' ' + ${match.user1.getGender()}"></p>
                 <p th:text="'유저2: ' + ${match.user2.name} + ' ' + ${match.user2.getGender()}"></p>
             </div>
+            <form th:action="@{/sendSms/{matchId}(matchId=${match.getId()})}" method="post">
+                <button type="submit" class="nes-btn is-primary">문자 발송</button>
+            </form>
         </div>
     </div>
 
@@ -31,6 +35,12 @@
     <div class="form-container">
         <form th:action="@{/matchResult}" method="get">
             <button type="submit" class="nes-btn is-success">매칭 시작</button>
+        </form>
+    </div>
+
+    <div class="form-container">
+        <form th:action="@{/sendAllSms}" method="post">
+            <button type="submit" class="nes-btn is-warning">일괄 발송</button>
         </form>
     </div>
 </div>

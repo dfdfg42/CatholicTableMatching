@@ -1,7 +1,9 @@
 package com.csec.CatholicTableMatching.security.repository;
 
 import com.csec.CatholicTableMatching.security.domain.User;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -15,5 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findUserByName(String name);
 
     @Query("SELECT u FROM CUSER u JOIN u.matchForm mf WHERE mf.foodType = :foodType AND mf.timeSlot = :timeSlot AND u.gender = :preferGender AND u.matched = :matched")
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<User> findMatchesByPreferences(String foodType, String timeSlot, String preferGender, boolean matched);
+
 }
