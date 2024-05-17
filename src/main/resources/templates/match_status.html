@@ -2,12 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>매칭 결과</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>매칭 시작 및 결과</title>
+    <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="/css/navbar_style.css" rel="stylesheet" />
+    <link href="/css/match_results_style.css" rel="stylesheet" />
 </head>
 <body>
-<h1>매칭 결과</h1>
-<div th:each="match : ${matches}">
-    <p th:text="'매칭 상대: ' + ${match.user2.name} + ', 음식 종류: ' + ${match.foodType} + ', 시간: ' + ${match.timeSlot}"></p>
+
+<!-- 네비게이션 -->
+<nav th:replace="~{layout/navbar_nes :: navbarnes}"></nav>
+
+<div class="container">
+    <!-- 매칭 결과 표시 -->
+    <div class="nes-container with-title matches-container is-rounded">
+        <p class="title">매칭 결과</p>
+        <div class="nes-container is-rounded match">
+            <p th:text="'유저 번호: ' + ${user.getId()} "></p>
+
+        </div>
+    </div>
 </div>
+
 </body>
 </html>

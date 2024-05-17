@@ -26,7 +26,7 @@ public class MatchingService {
         List<User> users = userRepository.findAll();
         List<Match> matches = new ArrayList<>();
         for (User user : users) {
-            if(!user.isMatched()){
+            if(!user.isMatched() && !(user.getMatchForm()==null) ){
                 Match match = createMatch(user);
                 if (match != null) {
                     matches.add(match);

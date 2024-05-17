@@ -54,6 +54,7 @@ public class MatchingController {
              return "redirect:/matching";
         }
         else{
+             model.addAttribute("user", loginUser); //네비바때문에 넘김
              model.addAttribute("matchForm", new MatchForm());
              return "match_form_nes";
          }
@@ -77,17 +78,23 @@ public class MatchingController {
 
     @GetMapping("/matching")
     @PreAuthorize("isAuthenticated()")
-    public String matching(){
+    public String matching(@AuthenticationPrincipal PrincipalDetails userDetails,Model model){
+        User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
+                () -> new RuntimeException());
+        model.addAttribute("user" , loginUser); //네비바때문에 넘김
         return "matching";
     } //사용자가 매칭을 넣었을때 넣었다고 보여지는 화면
 
 
     //전체 매칭한 결과 페이지
     @GetMapping("/matchResult")
-/*    @PreAuthorize("isAuthenticated()")*/
-    public String findAllMatches(Model model) {
+    @PreAuthorize("isAuthenticated()")
+    public String findAllMatches(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
         matchingService.createMatchForAllUsers();
+        User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
+                () -> new RuntimeException());
         List<Match> matches = matchingService.MatchResult();
+        model.addAttribute("user",loginUser);
         model.addAttribute("matches", matches);
         System.out.println(matches);
         return "match_results";  // 매칭 결과 페이지 뷰 이름
@@ -98,23 +105,20 @@ public class MatchingController {
     public String MatchStatus(@PathVariable("userId") Long userId, Model model){
         User user = userRepository.findUserById(userId).orElseThrow(
                 () -> new RuntimeException("No customer found with ID " + userId));
-        model.addAttribute("customer", user);
+        model.addAttribute("user", user);
         return "match_status";
 
     } // 매치 현황판*/ 사용자가 나중에 매칭결과를 확인할수 있게 만드는창??
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/userinfo")
-    public String userInfo(@AuthenticationPrincipal PrincipalDetails userDetails, @ModelAttribute User user){
+    public String userInfo(@AuthenticationPrincipal PrincipalDetails userDetails, @ModelAttribute User user, Model model){
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
-
-
-        if (loginUser.getPhoneNum() ==null){
-            user.updateUserInfo(loginUser.getName(),loginUser.getGender(), loginUser.getPhoneNum() );
-        }else{
-        user.updateUserInfo(loginUser.getName(),loginUser.getGender(), encryptService.decrypt(loginUser.getPhoneNum()));
+        if (loginUser.getPhoneNum() !=null){
+            loginUser.setPhoneNum(encryptService.decrypt(loginUser.getPhoneNum())); // 번호있을때만 암호화풀고 넘김
         }
+        model.addAttribute("user",loginUser);
         return "user_form";
     }
 
@@ -134,6 +138,7 @@ public class MatchingController {
     }
 
 
+
     @PostConstruct
     @Transactional
     public void testCreateMatch() {
@@ -149,12 +154,12 @@ public class MatchingController {
         userkim.setMatchForm(matchFormkim);
         userRepository.save(userko);
         userRepository.save(userkim);
-
+        // 무작위 생성기
         /*Random random = new Random();
         List<String> foodTypes = Arrays.asList("한식", "일식", "양식", "중식");
         List<String> timeSlots = Arrays.asList("Lunch", "Evening");
 
-        IntStream.rangeClosed(1, 15).forEach(i -> {
+        IntStream.rangeClosed(1, 200).forEach(i -> {
             String userName = "user" + i;
             String gender = i % 2 == 0 ? "F" : "M"; // 짝수는 여성, 홀수는 남성
             String phoneNum = "0101234123" + i;

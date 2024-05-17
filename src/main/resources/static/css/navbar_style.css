@@ -85,6 +85,7 @@ body {
 }
 
 .menu-panel {
+    margin-top: 5px;
     display: flex;
     flex-direction: column; /* 메뉴 항목들을 세로로 정렬 */
     justify-content: space-between; /* 링크와 섹션 간 간격 조정 */
@@ -103,3 +104,5 @@ body {
 .dialog-menu button {
     margin: auto; /* Center the button inside the menu */
 }
+
+
