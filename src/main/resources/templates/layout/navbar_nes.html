@@ -41,7 +41,8 @@
         <a href="/userinfo">내 정보수정</a>
         <a href="/match">매칭하기</a>
         <a th:href="@{/match/{userId}(userId=${user.id})}">나의 매칭</a>
-        <a href="#">이용방법</a>
+        <a href="#" onclick="document.getElementById('dialog-rounded-help').showModal();">이용방법</a>
+
 
         <section>
             <button type="button" class="nes-btn is-primary want" onclick="document.getElementById('dialog-rounded-inSta').showModal();">
@@ -61,6 +62,17 @@
                 </form>
             </dialog>
         </section>
+
+        <dialog class="nes-dialog is-rounded" id="dialog-rounded-help" style="width: 80%;">
+            <form method="dialog">
+                <p class="title-help" style="display: flex; justify-content: center; align-items: center;">이용방법</p>
+                <p>1. 내 정보를 입력해주세요<br> 2. 원하는 음식종류와 시간대를 골라주세요.<br> 3. 위 정보들을 확인하고 매칭을 시작해주세요.
+                </p>
+                <menu class="dialog-menu" style="display: flex; justify-content: center;">
+                    <button class="nes-btn is-primary">확인</button>
+                </menu>
+            </form>
+        </dialog>
 
 
     </div>
