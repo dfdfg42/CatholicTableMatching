@@ -154,18 +154,18 @@ public class MatchingController {
     @Transactional
     public void testCreateMatch() {
         String phone1 = new String("01039077292");
-        /*String phone2 = new String("01094069318");*/
+        String phone2 = new String("01094069318");
 
 
         User userko = new User("고경우", "123", "M", encryptService.encrypt(phone1), false);
-        /*User userkim = new User("이승원", "145", "F", encryptService.encrypt(phone2), false);*/
+        User userkim = new User("이승원", "145", "F", encryptService.encrypt(phone2), false);
         MatchForm matchFormko = new MatchForm(userko, "한식", "저녁", "F");
-        /*MatchForm matchFormkim = new MatchForm(userko, "한식", "evening", "F");*/
+        MatchForm matchFormkim = new MatchForm(userko, "한식", "evening", "F");
         userko.setMatchForm(matchFormko);
-        /*userkim.setMatchForm(matchFormkim);*/
+        userkim.setMatchForm(matchFormkim);
         userRepository.save(userko);
-        /*userRepository.save(userkim);*/
-        /*// 무작위 생성기
+        userRepository.save(userkim);
+        // 무작위 생성기
         Random random = new Random();
         List<String> foodTypes = Arrays.asList("한식", "일식", "양식", "중식");
         List<String> timeSlots = Arrays.asList("Lunch", "Evening");
@@ -173,7 +173,7 @@ public class MatchingController {
         IntStream.rangeClosed(1, 200).forEach(i -> {
             String userName = "user" + i;
             String gender = i % 2 == 0 ? "F" : "M"; // 짝수는 여성, 홀수는 남성
-            String phoneNum = "0101234123" + i;
+            String phoneNum = "01000000000";
             boolean matched = false;
 
             // User 객체 생성
@@ -191,7 +191,7 @@ public class MatchingController {
 
             // User 저장
             userRepository.save(user);
-        });*/
+        });
     }
 }
 
