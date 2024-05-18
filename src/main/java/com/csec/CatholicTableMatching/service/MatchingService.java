@@ -12,13 +12,15 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 @RequiredArgsConstructor
 public class MatchingService {
     private final UserRepository userRepository;
     private final MatchRepository matchRepository;
-
+    private final Lock lock = new ReentrantLock(); //락 걸어 버리기
     private final MatchFormRepository matchFormRepository;
 
     @Transactional
@@ -38,23 +40,29 @@ public class MatchingService {
 
     @Transactional
     public Match createMatch(User user) {
-        MatchForm matchForm = user.getMatchForm();
-        List<User> potentialMatches = userRepository.findMatchesByPreferences(
-                matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender(), false);
+        lock.lock(); //락 함걸어봄
+        try {
+            MatchForm matchForm = user.getMatchForm();
+            List<User> potentialMatches = userRepository.findMatchesByPreferences(
+                    matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender(), false);
 
-        for (User potentialMatch : potentialMatches) {
-            if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId()) &&!potentialMatch.getGender().equals(user.getGender()) ) {
-                Match match = new Match(user,potentialMatch,new Date(),matchForm.getTimeSlot(),matchForm.getFoodType());
+            for (User potentialMatch : potentialMatches) {
+                if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId())
+                        && !potentialMatch.getGender().equals(user.getGender())) {
+                    Match match = new Match(user, potentialMatch, new Date(), matchForm.getTimeSlot(), matchForm.getFoodType());
 
-                potentialMatch.setMatched(true);
-                user.setMatched(true);
+                    potentialMatch.setMatched(true);
+                    user.setMatched(true);
 
-                userRepository.save(potentialMatch);
-                userRepository.save(user);
-                return matchRepository.save(match);
+                    userRepository.save(potentialMatch);
+                    userRepository.save(user);
+                    return matchRepository.save(match);
+                }
             }
+            return null; // No match found
+        } finally {
+            lock.unlock(); // 락 임시
         }
-        return null; // No match found
     }
 
     @Transactional
