@@ -39,6 +39,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'  // Bean Validation
 	implementation 'jakarta.transaction:jakarta.transaction-api'  // Transaction API
 	implementation 'org.hibernate.validator:hibernate-validator'  // Hibernate Validator
+	runtimeOnly 'org.postgresql:postgresql'
 }
 
 tasks.named('test') {
