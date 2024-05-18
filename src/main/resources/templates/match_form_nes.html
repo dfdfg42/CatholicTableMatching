@@ -60,12 +60,29 @@
                 </label>-->
             </div>
         </div>
-        <!-- 매칭하기 버튼 -->
-        <div class="button-center">
-            <button type="submit" class="nes-btn is-primary">매칭하기</button>
-        </div>
+        <section>
+            <!-- 매칭하기 버튼 -->
+            <div class="button-center">
+                <button type="button" class="nes-btn is-primary" onclick="document.getElementById('dialog-rounded-match').showModal();">매칭하기</button>
+            </div>
+            <dialog class="nes-dialog is-rounded" id="dialog-rounded-match" style="width: 80%; text-align: center;">
+                <form method="dialog">
+                    <p class="nes-text is-error" style="text-align: center;">만냠을 시작하기 전에,<br>내 정보를 확인해 주세요!</p>
+                    <p th:text="'이름: ' + ${user.name}"></p>
+                    <p th:text="'전화번호: ' + ${user.phoneNum}"></p>
+                    <p th:text="'성별: ' + (${user.gender} == 'M' ? '남' : '여')"></p>
+                    <menu class="dialog-menu" style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+                        <button type="button" class="nes-btn" style="margin: 0; width: 100px;" onclick="document.getElementById('dialog-rounded-match').close();">취소</button>
+                        <button type="submit" class="nes-btn is-primary" style="margin: 0; width: 100px;">매칭하기</button>
+                    </menu>
+                </form>
+            </dialog>
+        </section>
     </form>
 </div>
+
+<!-- 매칭 확인 다이얼로그 -->
+
 
 </body>
 </html>
