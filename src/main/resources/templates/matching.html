@@ -27,7 +27,14 @@
         <p class="nes-balloon from-left nes-pointer">
             <span class="nes-text is-success">오늘 머먹지</span>
         </p>
-        <a href="https://nyumtolic.com" type="button" class="nes-btn is-success">냠톨릭</a>
+        <a href="https://nyumtolic.com" type="button" class="nes-btn is-success">냠톨릭</a><br>
+
+    </div>
+
+    <div>
+        <p>나의 만냠요청</p>
+        <p th:text="'음식종류: ' + ${user.getMatchForm().foodType}"></p>
+        <p th:text="'시간: ' + ${user.getMatchForm().timeSlot}"></p>
     </div>
 </div>
 
