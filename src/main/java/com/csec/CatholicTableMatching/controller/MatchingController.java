@@ -134,7 +134,6 @@ public class MatchingController {
 
         userRepository.save(loginUser);
 
-
         return "redirect:/match";
     }
 
@@ -156,7 +155,7 @@ public class MatchingController {
         userRepository.save(userko);
         userRepository.save(userkim);
         // 무작위 생성기
-        /*Random random = new Random();
+        Random random = new Random();
         List<String> foodTypes = Arrays.asList("한식", "일식", "양식", "중식");
         List<String> timeSlots = Arrays.asList("Lunch", "Evening");
 
@@ -181,7 +180,7 @@ public class MatchingController {
 
             // User 저장
             userRepository.save(user);
-        });*/
+        });
     }
 }
 

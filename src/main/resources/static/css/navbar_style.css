@@ -90,10 +90,10 @@ body {
     flex-direction: column; /* 메뉴 항목들을 세로로 정렬 */
     justify-content: space-between; /* 링크와 섹션 간 간격 조정 */
 }
-.nes-btn.is-primary {
+.nes-btn.is-primary.want {
     color: #ffffff; /* 글자 색상 변경 */
     padding: 8px 10px; /* 내부 여백 변경 */
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 }
 .dialog-menu {
     display: flex;

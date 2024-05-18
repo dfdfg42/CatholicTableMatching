@@ -14,7 +14,7 @@ body {
     align-items: center;
     display: flex;
     height: 100vh;
-    font-size: 20px; /* Slightly larger base font */
+    font-size: 18px; /* Slightly larger base font */
 }
 
 .form-container {
