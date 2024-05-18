@@ -82,6 +82,9 @@ public class MatchingController {
     public String matching(@AuthenticationPrincipal PrincipalDetails userDetails,Model model){
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
+        if (loginUser.isMatched()){
+            return "redirect:/match/"+ loginUser.getId();
+        }
         model.addAttribute("user" , loginUser); //네비바때문에 넘김
         return "matching";
     } //사용자가 매칭을 넣었을때 넣었다고 보여지는 화면
@@ -106,6 +109,14 @@ public class MatchingController {
     public String MatchStatus(@PathVariable("userId") Long userId, Model model){
         User user = userRepository.findUserById(userId).orElseThrow(
                 () -> new RuntimeException("No customer found with ID " + userId));
+        if(!user.isMatched() && user.getMatchForm()!= null){
+            return "redirect:/matching";
+        }
+        if(user.isMatched()){
+            User partner =matchingService.findPartner(user);
+            String partnerName =partner.getName();
+            model.addAttribute("partnerName" ,partnerName);
+        } //파트너 이름 찾는 과정
         model.addAttribute("user", user);
         return "match_status";
 
@@ -143,18 +154,18 @@ public class MatchingController {
     @Transactional
     public void testCreateMatch() {
         String phone1 = new String("01039077292");
-        String phone2 = new String("01094069318");
+        /*String phone2 = new String("01094069318");*/
 
 
         User userko = new User("고경우", "123", "M", encryptService.encrypt(phone1), false);
-        User userkim = new User("이승원", "145", "F", encryptService.encrypt(phone2), false);
-        MatchForm matchFormko = new MatchForm(userko, "한식", "evening", "F");
-        MatchForm matchFormkim = new MatchForm(userko, "한식", "evening", "F");
+        /*User userkim = new User("이승원", "145", "F", encryptService.encrypt(phone2), false);*/
+        MatchForm matchFormko = new MatchForm(userko, "한식", "저녁", "F");
+        /*MatchForm matchFormkim = new MatchForm(userko, "한식", "evening", "F");*/
         userko.setMatchForm(matchFormko);
-        userkim.setMatchForm(matchFormkim);
+        /*userkim.setMatchForm(matchFormkim);*/
         userRepository.save(userko);
-        userRepository.save(userkim);
-        // 무작위 생성기
+        /*userRepository.save(userkim);*/
+        /*// 무작위 생성기
         Random random = new Random();
         List<String> foodTypes = Arrays.asList("한식", "일식", "양식", "중식");
         List<String> timeSlots = Arrays.asList("Lunch", "Evening");
@@ -180,7 +191,7 @@ public class MatchingController {
 
             // User 저장
             userRepository.save(user);
-        });
+        });*/
     }
 }
 

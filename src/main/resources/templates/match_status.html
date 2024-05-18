@@ -43,10 +43,20 @@
 <div class="container match-result">
     <!-- 매칭 결과 표시 -->
     <div class="nes-container with-title matches-container is-rounded">
-        <p class="title">매칭 결과</p>
-        <div class="nes-container is-rounded match">
-            <p th:text="'유저 번호: ' + ${user.getId()} "></p>
+        <p class="title">만냠 결과</p>
 
+        <!-- 조건에 따른 메시지 표시 -->
+        <div th:if="${user.matched} == false and ${user.matchForm} == null">
+            <p>아직 만냠을 시작하지 않으셨군요</p>
+        </div>
+
+        <div th:if="${user.matched} == true">
+            <div class="nes-container is-rounded match">
+                <p th:text="'내이름: ' + ${user.getName()}"></p>
+                <p th:text="'음식종류: ' + ${user.getMatchForm().foodType}"></p>
+                <p th:text="'시간: ' + ${user.getMatchForm().timeSlot}"></p>
+                <p th:text="'파트너 이름: ' + ${partnerName}"></p>
+            </div>
         </div>
     </div>
 </div>

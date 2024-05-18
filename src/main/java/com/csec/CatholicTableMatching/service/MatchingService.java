@@ -63,6 +63,15 @@ public class MatchingService {
         return matches;
     }
 
+    @Transactional
+    public User findPartner(User user) {
+        User partner = matchRepository.findPartnerByUser1(user);
+        if (partner == null) {
+            partner = matchRepository.findPartnerByUser2(user);
+        }
+        return partner;
+    }
+
 
 
 
