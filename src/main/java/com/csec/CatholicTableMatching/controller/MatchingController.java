@@ -90,9 +90,9 @@ public class MatchingController {
     } //사용자가 매칭을 넣었을때 넣었다고 보여지는 화면
 
 
-    //전체 매칭한 결과 페이지
+    //전체 매칭한 결과 페이지 (어드민 전용)
     @GetMapping("/matchResult")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String findAllMatches(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
         matchingService.createMatchForAllUsers();
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
@@ -104,11 +104,15 @@ public class MatchingController {
         return "match_results";  // 매칭 결과 페이지 뷰 이름
     }
 
-    @PreAuthorize("isAuthenticated()") // todo 사용자 id와 인증한 주체의 id가 동일한지도 검사 필요
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/match/{userId}")
-    public String MatchStatus(@PathVariable("userId") Long userId, Model model){
+    public String MatchStatus(@AuthenticationPrincipal PrincipalDetails userDetails,
+                              @PathVariable("userId") Long userId, Model model){
         User user = userRepository.findUserById(userId).orElseThrow(
                 () -> new RuntimeException("No customer found with ID " + userId));
+        if (user.getLoginId() != userDetails.getUsername()) {
+            return "redirect:/match";
+        }
         if(!user.isMatched() && user.getMatchForm()!= null){
             return "redirect:/matching";
         }

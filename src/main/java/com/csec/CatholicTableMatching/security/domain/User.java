@@ -22,6 +22,7 @@ public class User {
     @Column(unique = true)
     private String loginId;
 
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     private String gender;     // 'M' for male, 'F' for female
