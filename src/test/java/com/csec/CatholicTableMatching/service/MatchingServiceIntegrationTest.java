@@ -29,7 +29,7 @@ public class MatchingServiceIntegrationTest {
     public void testCreateMatch() {
         // Arrange
         User user1 = new User();
-        user1.setLoginId("user1");
+        user1.setLoginId("testuser1");
         user1.setGender("M");
         user1.setMatched(false);
         MatchForm matchForm1 = new MatchForm();
@@ -41,7 +41,7 @@ public class MatchingServiceIntegrationTest {
         userRepository.save(user1);
 
         User potentialMatch = new User();
-        potentialMatch.setLoginId("user2");
+        potentialMatch.setLoginId("testuser2");
         potentialMatch.setGender("F");
         potentialMatch.setMatched(false);
         MatchForm matchForm2 = new MatchForm();
