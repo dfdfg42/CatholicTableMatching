@@ -20,8 +20,8 @@ class UserRepositoryTest {
         @DisplayName("유저 생성")
         void createUser() {
             // given
-            User user1 = User.builder().id(1L).loginId("user1").build();
-            User user2 = User.builder().id(1L).loginId("user1").build();
+            User user1 = User.builder().loginId("user1").build();
+            User user2 = User.builder().loginId("user2").build();
 
             // when
             User result1 = cUserRepository.save(user1);
@@ -36,8 +36,8 @@ class UserRepositoryTest {
         @DisplayName("유저 리스트 조회")
         void getUserList() {
             // given
-            User user1 = User.builder().id(1L).loginId("user1").build();
-            User user2 = User.builder().id(1L).loginId("user1").build();
+            User user1 = User.builder().loginId("user1").build();
+            User user2 = User.builder().loginId("user2").build();
             cUserRepository.save(user1);
             cUserRepository.save(user2);
 
