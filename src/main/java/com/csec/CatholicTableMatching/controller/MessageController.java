@@ -65,7 +65,7 @@ public class MessageController {
         String user2Phone = encryptService.decrypt(match.getUser2().getPhoneNum());
 
         String user1Message = String.format("만냠-같이 밥먹을 사람 구하기\n 매칭된 정보가 도착했습니다: \n이름: %s\n성별: %s\n전화번호: %s",
-                match.getUser2().getName(), match.getUser2().getGender(), user1Phone);
+                match.getUser2().getName(), match.getUser2().getGender(), user2Phone);
 
         String user2Message = String.format("만냠-같이 밥먹을 사람 구하기\n 매칭된 정보가 도착했습니다: \n이름: %s\n성별: %s\n전화번호: %s",
                 match.getUser1().getName(), match.getUser1().getGender(), user1Phone);
