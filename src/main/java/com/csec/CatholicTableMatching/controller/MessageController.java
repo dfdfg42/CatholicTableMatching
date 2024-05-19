@@ -9,6 +9,7 @@ import com.csec.CatholicTableMatching.service.MatchingService;
 import com.csec.CatholicTableMatching.service.SendMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,8 @@ public class MessageController {
     private final MatchRepository matchRepository;
 
 
-    @GetMapping("/send")
+    @GetMapping("/send") // 어드민용
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String sendMessage(
             @RequestParam String from,
             @RequestParam String to,
