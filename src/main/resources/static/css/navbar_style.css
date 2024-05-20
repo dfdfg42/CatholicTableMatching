@@ -93,7 +93,7 @@ body {
 .nes-btn.is-primary.want {
     color: #ffffff; /* 글자 색상 변경 */
     padding: 8px 10px; /* 내부 여백 변경 */
-    margin-bottom: 15px;
+    margin-bottom: 40px;
 }
 .dialog-menu {
     display: flex;
@@ -103,6 +103,10 @@ body {
 
 .dialog-menu button {
     margin: auto; /* Center the button inside the menu */
+}
+
+.indent {
+    margin-left: 27px; /* 원하는 들여쓰기 값 설정 */
 }
 
 
