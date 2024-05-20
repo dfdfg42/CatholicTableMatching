@@ -164,7 +164,7 @@ public class MatchingController {
         User userko = new User("고경우", "123", "M", encryptService.encrypt(phone1), false);
         User userkim = new User("이승원", "145", "F", encryptService.encrypt(phone2), false);
         MatchForm matchFormko = new MatchForm(userko, "한식", "저녁", "F");
-        MatchForm matchFormkim = new MatchForm(userko, "한식", "evening", "F");
+        MatchForm matchFormkim = new MatchForm(userko, "한식", "저녁", "F");
         userko.setMatchForm(matchFormko);
         userkim.setMatchForm(matchFormkim);
         userRepository.save(userko);
