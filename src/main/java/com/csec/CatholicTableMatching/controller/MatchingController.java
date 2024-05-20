@@ -110,7 +110,7 @@ public class MatchingController {
                               @PathVariable("userId") Long userId, Model model){
         User user = userRepository.findUserById(userId).orElseThrow(
                 () -> new RuntimeException("No customer found with ID " + userId));
-        if (user.getLoginId() != userDetails.getUsername()) {
+        if (!user.getLoginId().equals(userDetails.getUsername())) {
             return "redirect:/match";
         }
         if(!user.isMatched() && user.getMatchForm()!= null){
