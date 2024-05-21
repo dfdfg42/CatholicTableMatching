@@ -91,18 +91,30 @@ public class MatchingController {
 
 
     //전체 매칭한 결과 페이지 (어드민 전용)
-    @GetMapping("/matchResult")
+    @PostMapping("/matchResult")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String findAllMatches(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
+    public String createAllMatches(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
         matchingService.createMatchForAllUsers();
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
         List<Match> matches = matchingService.MatchResult();
         model.addAttribute("user",loginUser);
         model.addAttribute("matches", matches);
-        System.out.println(matches);
+        return "redirect:/matchResult";  // 매칭 결과 페이지 뷰 이름
+    }
+
+
+    @GetMapping("/matchResult")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String findAllMatches(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
+        User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
+                () -> new RuntimeException());
+        List<Match> matches = matchingService.MatchResult();
+        model.addAttribute("user",loginUser);
+        model.addAttribute("matches", matches);
         return "match_results";  // 매칭 결과 페이지 뷰 이름
     }
+
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping("/match/{userId}")
@@ -154,7 +166,7 @@ public class MatchingController {
 
 
 
-    @PostConstruct
+    /*@PostConstruct
     @Transactional
     public void testCreateMatch() {
         String phone1 = new String("01039077292");
@@ -196,6 +208,6 @@ public class MatchingController {
             // User 저장
             userRepository.save(user);
         });
-    }
+    }*/
 }
 
