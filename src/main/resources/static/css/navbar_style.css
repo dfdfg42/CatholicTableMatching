@@ -93,7 +93,7 @@ body {
 .nes-btn.is-primary.want {
     color: #ffffff; /* 글자 색상 변경 */
     padding: 8px 10px; /* 내부 여백 변경 */
-    margin-bottom: 40px;
+    margin-bottom: 200px;
 }
 .dialog-menu {
     display: flex;
