@@ -53,34 +53,36 @@ public class MessageController {
     private void sendUserDetailsToEachOther(Match match) {
         String user1Phone = encryptService.decrypt(match.getUser1().getPhoneNum());
         String user2Phone = encryptService.decrypt(match.getUser2().getPhoneNum());
+        String matchedCategories = getMatchedCategories(match.getUser1().getMatchForm());
 
         String user1Message = formatMessage(
                 match.getUser2().getName(),
-                match.getUser2().getGender(),
                 user2Phone,
-                getMatchedCategories(match.getUser1().getMatchForm())
+                matchedCategories,
+                match.getTimeSlot()
         );
 
         String user2Message = formatMessage(
                 match.getUser1().getName(),
-                match.getUser1().getGender(),
                 user1Phone,
-                getMatchedCategories(match.getUser2().getMatchForm())
+                matchedCategories,
+                match.getTimeSlot()
         );
 
         sendMessageService.sendMessage("01039077292", user1Phone, user1Message);
         sendMessageService.sendMessage("01039077292", user2Phone, user2Message);
     }
 
-    private String formatMessage(String name, String gender, String phone, String categories) {
+    private String formatMessage(String name,  String phone, String categories, String timeslot) {
         return String.format(
-                "만냠 - 같이 밥먹을 사람 구하기\n" +
-                        "매칭된 정보가 도착했습니다:\n" +
-                        "이름: %s\n" +
-                        "성별: %s\n" +
+                "[만냠-맛있는 만냠]\n\n" +
+                        "만냠 정보가 도착했습니다!\n\n" +
+                        "같이 밥먹을 사람: %s\n" +
                         "전화번호: %s\n" +
-                        "선호 음식 카테고리: %s",
-                name, gender, phone, categories
+                        "냠톨릭에서 뽑은 랜덤 음식점 3개: \n %s\n" +
+                        "만날 시간대: %s\n" +
+                        "다른 음식점에서 만나고싶다면 냠톨릭에서 목록 확인 \n https://nyumtolic.com",
+                name, phone, categories,timeslot
         );
     }
 
