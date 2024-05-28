@@ -61,3 +61,7 @@
 <img src="https://img.shields.io/badge/kakao OAUTH-FFCD00?style=for-the-badge&logo=kakao&logoColor=white">
 <img src="https://img.shields.io/badge/냠톨릭 API-E6007A?style=for-the-badge&logo=&logoColor=white">
 </div>
+
+# Architecture
+![새 Microsoft PowerPoint 프레젠테이션](https://github.com/SolfE/CatholicTableMatching/assets/74342496/22e8f135-1984-4a89-aaaa-f93f7d86b455)
+
