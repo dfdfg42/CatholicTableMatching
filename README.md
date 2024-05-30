@@ -48,6 +48,7 @@
 <img src="https://img.shields.io/badge/-Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
 <img src="https://img.shields.io/badge/-Spring Security-6DB33F?style=for-the-badge&logo=Spring Security&logoColor=white">
 <img src="https://img.shields.io/badge/-Thymeleaf-6DB33F?style=for-the-badge&logo=Thymeleaf&logoColor=white">
+<img src="https://img.shields.io/badge/-postgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white">
 </div>
 
 ### Environment
@@ -63,5 +64,5 @@
 </div>
 
 # Architecture
-![새 Microsoft PowerPoint 프레젠테이션](https://github.com/SolfE/CatholicTableMatching/assets/74342496/22e8f135-1984-4a89-aaaa-f93f7d86b455)
+<div align="center"><img src="https://github.com/SolfE/CatholicTableMatching/assets/74342496/22e8f135-1984-4a89-aaaa-f93f7d86b455"></div>
 
