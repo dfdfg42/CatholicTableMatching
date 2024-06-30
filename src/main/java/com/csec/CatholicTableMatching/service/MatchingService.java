@@ -31,6 +31,17 @@ public class MatchingService {
         this.userRepository = userRepository;
         this.matchRepository = matchRepository;
         this.matchFormRepository = matchFormRepository;
+        initializeTreeWithUsers();
+    }
+
+    // 모든 유저를 트리에 삽입하는 메서드
+    private void initializeTreeWithUsers() {
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            if (!user.isMatched() && user.getMatchForm() != null) {
+                addToIndex(user);
+            }
+        }
     }
 
     @Transactional
