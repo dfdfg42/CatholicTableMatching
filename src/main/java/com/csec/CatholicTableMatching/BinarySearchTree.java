@@ -13,37 +13,37 @@ public class BinarySearchTree {
         this.root = null;
     }
 
-    public void insert(String key, User user) {
-        root = insertRec(root, key, user);
+    public void insert(String foodType, String timeSlot, String preferGender, User user) {
+        root = insertRec(root, foodType, timeSlot, preferGender, user);
     }
 
-    private TreeNode insertRec(TreeNode root, String key, User user) {
+    private TreeNode insertRec(TreeNode root, String foodType, String timeSlot, String preferGender, User user) {
         if (root == null) {
-            List<User> users = new ArrayList<>();
-            users.add(user);
-            return new TreeNode(key, users);
+            return new TreeNode(foodType, timeSlot, preferGender, user);
         }
-        if (key.compareTo(root.key) < 0) {
-            root.left = insertRec(root.left, key, user);
-        } else if (key.compareTo(root.key) > 0) {
-            root.right = insertRec(root.right, key, user);
+        int cmp = compare(root, foodType, timeSlot, preferGender);
+        if (cmp > 0) {
+            root.left = insertRec(root.left, foodType, timeSlot, preferGender, user);
+        } else if (cmp < 0) {
+            root.right = insertRec(root.right, foodType, timeSlot, preferGender, user);
         } else {
             root.users.add(user);
         }
         return root;
     }
 
-    public void remove(String key, User user) {
-        root = removeRec(root, key, user);
+    public void remove(String foodType, String timeSlot, String preferGender, User user) {
+        root = removeRec(root, foodType, timeSlot, preferGender, user);
     }
 
-    private TreeNode removeRec(TreeNode root, String key, User user) {
+    private TreeNode removeRec(TreeNode root, String foodType, String timeSlot, String preferGender, User user) {
         if (root == null) return null;
 
-        if (key.compareTo(root.key) < 0) {
-            root.left = removeRec(root.left, key, user);
-        } else if (key.compareTo(root.key) > 0) {
-            root.right = removeRec(root.right, key, user);
+        int cmp = compare(root, foodType, timeSlot, preferGender);
+        if (cmp > 0) {
+            root.left = removeRec(root.left, foodType, timeSlot, preferGender, user);
+        } else if (cmp < 0) {
+            root.right = removeRec(root.right, foodType, timeSlot, preferGender, user);
         } else {
             Iterator<User> iterator = root.users.iterator();
             while (iterator.hasNext()) {
@@ -57,9 +57,11 @@ public class BinarySearchTree {
                 if (root.left == null) return root.right;
                 if (root.right == null) return root.left;
                 TreeNode temp = findMin(root.right);
-                root.key = temp.key;
+                root.foodType = temp.foodType;
+                root.timeSlot = temp.timeSlot;
+                root.preferGender = temp.preferGender;
                 root.users = temp.users;
-                root.right = removeRec(root.right, temp.key, user);
+                root.right = removeRec(root.right, temp.foodType, temp.timeSlot, temp.preferGender, user);
             }
         }
         return root;
@@ -70,18 +72,29 @@ public class BinarySearchTree {
         return root;
     }
 
-    public List<User> search(String key) {
-        TreeNode node = searchRec(root, key);
-        return node != null ? node.users : null;
+    public List<User> search(String foodType, String timeSlot, String preferGender) {
+        return searchRec(root, foodType, timeSlot, preferGender);
     }
 
-    private TreeNode searchRec(TreeNode root, String key) {
-        if (root == null || root.key.equals(key)) {
-            return root;
+    private List<User> searchRec(TreeNode root, String foodType, String timeSlot, String preferGender) {
+        if (root == null) return new ArrayList<>();
+
+        int cmp = compare(root, foodType, timeSlot, preferGender);
+        if (cmp == 0) {
+            return root.users;
+        } else if (cmp > 0) {
+            return searchRec(root.left, foodType, timeSlot, preferGender);
+        } else {
+            return searchRec(root.right, foodType, timeSlot, preferGender);
         }
-        if (key.compareTo(root.key) < 0) {
-            return searchRec(root.left, key);
-        }
-        return searchRec(root.right, key);
+    }
+
+    private int compare(TreeNode node, String foodType, String timeSlot, String preferGender) {
+        int cmpFoodType = foodType.compareTo(node.foodType);
+        if (cmpFoodType != 0) return cmpFoodType;
+        int cmpTimeSlot = timeSlot.compareTo(node.timeSlot);
+        if (cmpTimeSlot != 0) return cmpTimeSlot;
+        return preferGender.compareTo(node.preferGender);
     }
 }
+
