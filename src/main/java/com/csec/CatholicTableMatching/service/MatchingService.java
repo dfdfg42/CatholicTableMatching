@@ -19,27 +19,29 @@ import java.util.concurrent.locks.ReentrantLock;
 @Service
 public class MatchingService {
 
-    private final BinarySearchTree binarySearchTree = new BinarySearchTree();
+    private final HashMap<String, List<User>> userTable = new HashMap<>();
+    private final HashMap<String, List<User>> unmatchedUserTable = new HashMap<>();
     private final UserRepository userRepository;
     private final MatchRepository matchRepository;
     private final MatchFormRepository matchFormRepository;
 
-    // lock을 이용한 동시성 제어
     private final Lock lock = new ReentrantLock();
 
     public MatchingService(UserRepository userRepository, MatchRepository matchRepository, MatchFormRepository matchFormRepository) {
         this.userRepository = userRepository;
         this.matchRepository = matchRepository;
         this.matchFormRepository = matchFormRepository;
-        initializeTreeWithUsers();
+        initializeTableWithUsers();
     }
 
-    // 모든 유저를 트리에 삽입하는 메서드
-    private void initializeTreeWithUsers() {
+    private void initializeTableWithUsers() {
         List<User> users = userRepository.findAll();
         for (User user : users) {
-            if (!user.isMatched() && user.getMatchForm() != null) {
-                addToIndex(user);
+            if (user.getMatchForm() != null) {
+                addToTable(user);
+                if (!user.isMatched()) {
+                    addToUnmatchedTable(user);
+                }
             }
         }
     }
@@ -50,32 +52,63 @@ public class MatchingService {
         List<Match> matches = new ArrayList<>();
         for (User user : users) {
             if (!user.isMatched() && user.getMatchForm() != null) {
-                addToIndex(user);
+                addToTable(user);
+                addToUnmatchedTable(user);
                 Match match = createMatch(user);
                 if (match != null) {
                     matches.add(match);
                 }
             }
         }
-        // return matches; // 모든 매치 결과 반환 (필요 시)
     }
 
-    private void addToIndex(User user) {
+    private void addToTable(User user) {
         MatchForm matchForm = user.getMatchForm();
-        binarySearchTree.insert(matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender(), user);
+        String key = generateKey(matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender());
+        userTable.computeIfAbsent(key, k -> new ArrayList<>()).add(user);
     }
 
-    private void removeFromIndex(User user) {
+    private void addToUnmatchedTable(User user) {
         MatchForm matchForm = user.getMatchForm();
-        binarySearchTree.remove(matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender(), user);
+        String key = generateKey(matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender());
+        unmatchedUserTable.computeIfAbsent(key, k -> new ArrayList<>()).add(user);
+    }
+
+    private void removeFromTable(User user) {
+        MatchForm matchForm = user.getMatchForm();
+        String key = generateKey(matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender());
+        List<User> users = userTable.get(key);
+        if (users != null) {
+            users.remove(user);
+            if (users.isEmpty()) {
+                userTable.remove(key);
+            }
+        }
+    }
+
+    private void removeFromUnmatchedTable(User user) {
+        MatchForm matchForm = user.getMatchForm();
+        String key = generateKey(matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender());
+        List<User> users = unmatchedUserTable.get(key);
+        if (users != null) {
+            users.remove(user);
+            if (users.isEmpty()) {
+                unmatchedUserTable.remove(key);
+            }
+        }
+    }
+
+    private String generateKey(String foodType, String timeSlot, String preferGender) {
+        return foodType + "|" + timeSlot + "|" + preferGender;
     }
 
     @Transactional
     public Match createMatch(User user) {
-        lock.lock(); // 동시성 제어를 위한 lock
+        lock.lock();
         try {
             MatchForm matchForm = user.getMatchForm();
-            List<User> potentialMatches = binarySearchTree.search(matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender());
+            String key = generateKey(matchForm.getFoodType(), matchForm.getTimeSlot(), matchForm.getPreferGender());
+            List<User> potentialMatches = unmatchedUserTable.getOrDefault(key, new ArrayList<>());
 
             for (User potentialMatch : potentialMatches) {
                 if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId())
@@ -85,22 +118,24 @@ public class MatchingService {
                     potentialMatch.setMatched(true);
                     user.setMatched(true);
 
-                    removeFromIndex(user);
-                    removeFromIndex(potentialMatch);
+                    removeFromTable(user);
+                    removeFromTable(potentialMatch);
+                    removeFromUnmatchedTable(user);
+                    removeFromUnmatchedTable(potentialMatch);
 
                     userRepository.save(potentialMatch);
                     userRepository.save(user);
                     return matchRepository.save(match);
                 }
             }
-            return null; // No match found
+            return null;
         } finally {
-            lock.unlock(); // 락 해제
+            lock.unlock();
         }
     }
 
     @Transactional
-    public List<Match> MatchResult() {
+    public List<Match> matchResult() {
         return matchRepository.findAll();
     }
 

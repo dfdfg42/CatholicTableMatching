@@ -97,7 +97,7 @@ public class MatchingController {
         matchingService.createMatchForAllUsers();
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
-        List<Match> matches = matchingService.MatchResult();
+        List<Match> matches = matchingService.matchResult();
         model.addAttribute("user",loginUser);
         model.addAttribute("matches", matches);
         return "redirect:/matchResult";  // 매칭 결과 페이지 뷰 이름
@@ -109,7 +109,7 @@ public class MatchingController {
     public String findAllMatches(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
-        List<Match> matches = matchingService.MatchResult();
+        List<Match> matches = matchingService.matchResult();
         model.addAttribute("user",loginUser);
         model.addAttribute("matches", matches);
         return "match_results";  // 매칭 결과 페이지 뷰 이름
@@ -166,7 +166,7 @@ public class MatchingController {
 
 
 
-    /*@PostConstruct
+    @PostConstruct
     @Transactional
     public void testCreateMatch() {
         String phone1 = new String("01039077292");
@@ -208,6 +208,6 @@ public class MatchingController {
             // User 저장
             userRepository.save(user);
         });
-    }*/
+    }
 }
 
