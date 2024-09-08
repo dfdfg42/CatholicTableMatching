@@ -48,17 +48,17 @@ public class MatchingController {
     public String MatchStart(@AuthenticationPrincipal PrincipalDetails userDetails,@ModelAttribute User user , Model model){
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
-         if (loginUser.getPhoneNum() == null) {
+        if (loginUser.getPhoneNum() == null) {
             return "redirect:/userinfo";
         }else if(loginUser.getMatchForm() != null){
-             return "redirect:/matching";
+            return "redirect:/matching";
         }
         else{
             loginUser.setPhoneNum(encryptService.decrypt(loginUser.getPhoneNum()));
-             model.addAttribute("user", loginUser); //네비바때문에 넘김
-             model.addAttribute("matchForm", new MatchForm());
-             return "match_form_nes";
-         }
+            model.addAttribute("user", loginUser); //네비바때문에 넘김
+            model.addAttribute("matchForm", new MatchForm());
+            return "match_form_nes";
+        }
     } // 매치 폼 화면이동
 
     @PostMapping("/match")
@@ -97,7 +97,7 @@ public class MatchingController {
         matchingService.createMatchForAllUsers();
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
-        List<Match> matches = matchingService.matchResult();
+        List<Match> matches = matchingService.MatchResult();
         model.addAttribute("user",loginUser);
         model.addAttribute("matches", matches);
         return "redirect:/matchResult";  // 매칭 결과 페이지 뷰 이름
@@ -109,7 +109,7 @@ public class MatchingController {
     public String findAllMatches(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
         User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
                 () -> new RuntimeException());
-        List<Match> matches = matchingService.matchResult();
+        List<Match> matches = matchingService.MatchResult();
         model.addAttribute("user",loginUser);
         model.addAttribute("matches", matches);
         return "match_results";  // 매칭 결과 페이지 뷰 이름
@@ -210,4 +210,3 @@ public class MatchingController {
         });
     }
 }
-
