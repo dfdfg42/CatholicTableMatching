@@ -7,6 +7,7 @@ import com.csec.CatholicTableMatching.security.domain.User;
 import com.csec.CatholicTableMatching.security.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MatchingService {
@@ -62,6 +64,9 @@ public class MatchingService {
                     }
                 }
             }
+
+            log.info("Final max overlap for user {}: {}", user.getName(), maxOverlap);
+
 
             if (bestMatch != null) {
                 Match bestUserMatch = new Match(user, bestMatch, new Date(), matchForm.getTimeSlot(), matchForm.getFoodType());

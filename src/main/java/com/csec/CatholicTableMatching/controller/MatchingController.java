@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -169,38 +170,54 @@ public class MatchingController {
     @PostConstruct
     @Transactional
     public void testCreateMatch() {
-        String phone1 = new String("01039077292");
-        String phone2 = new String("01094069318");
+        String phone1 = "01039077292";
+        String phone2 = "01094069318";
 
-
+        // User 객체 생성
         User userko = new User("고경우", "123", "M", encryptService.encrypt(phone1), false);
         User userkim = new User("이승원", "145", "F", encryptService.encrypt(phone2), false);
-        MatchForm matchFormko = new MatchForm(userko, "한식", "저녁", "F");
-        MatchForm matchFormkim = new MatchForm(userko, "한식", "저녁", "F");
+
+        // MatchForm 생성 (다중 시간대)
+        List<Integer> timeSlotsKo = Arrays.asList(18, 19, 20); // 예: 저녁시간대 (18시, 19시, 20시)
+        List<Integer> timeSlotsKim = Arrays.asList(18, 19, 20); // 예: 저녁시간대
+
+        MatchForm matchFormko = new MatchForm(userko, "한식", timeSlotsKo, "F");
+        MatchForm matchFormkim = new MatchForm(userkim, "한식", timeSlotsKim, "M");
+
+        // User와 MatchForm 연결
         userko.setMatchForm(matchFormko);
         userkim.setMatchForm(matchFormkim);
+
+        // 저장
         userRepository.save(userko);
         userRepository.save(userkim);
+
         // 무작위 생성기
         Random random = new Random();
         List<String> foodTypes = Arrays.asList("한식", "일식", "양식", "중식");
-        List<String> timeSlots = Arrays.asList("Lunch", "Evening");
 
+        // 가능한 시간대 (0~23 시간대, 랜덤 선택용)
+        List<Integer> possibleTimeSlots = Arrays.asList(9, 10, 12, 18, 19, 20);
+
+        // 200명의 유저 생성
         IntStream.rangeClosed(1, 200).forEach(i -> {
             String userName = "user" + i;
             String gender = i % 2 == 0 ? "F" : "M"; // 짝수는 여성, 홀수는 남성
-            String phoneNum = "01000000000";
+            String phoneNum = "010" + String.format("%08d", i); // 고유한 전화번호 생성
             boolean matched = false;
 
             // User 객체 생성
             User user = new User(userName, userName, gender, phoneNum, matched);
 
-            // 랜덤으로 foodType과 timeSlot 선택
+            // 랜덤으로 foodType 선택
             String foodType = foodTypes.get(random.nextInt(foodTypes.size()));
-            String timeSlot = timeSlots.get(random.nextInt(timeSlots.size()));
+
+            // 랜덤으로 3개의 시간대 선택
+            Collections.shuffle(possibleTimeSlots);
+            List<Integer> randomTimeSlots = possibleTimeSlots.subList(0, random.nextInt(3) + 1); // 1~3개의 시간대 선택
 
             // MatchForm 객체 생성
-            MatchForm matchForm = new MatchForm(user, foodType, timeSlot, "F");
+            MatchForm matchForm = new MatchForm(user, foodType, randomTimeSlots, "F");
 
             // User와 MatchForm 연결
             user.setMatchForm(matchForm);

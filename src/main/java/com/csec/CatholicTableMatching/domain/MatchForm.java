@@ -30,10 +30,11 @@ public class MatchForm{
 
     public MatchForm(){
     }
-    public MatchForm(User user, String foodType, String timeSlot, String preferGender) {
+    // 변경된 생성자: 단일 timeSlot 대신 timeSlots 리스트를 사용
+    public MatchForm(User user, String foodType, List<Integer> timeSlots, String preferGender) {
         this.user = user;
         this.foodType = foodType;
-        this.timeSlot = timeSlot;
+        this.timeSlots = timeSlots;
         this.preferGender = preferGender;
     }
 }
