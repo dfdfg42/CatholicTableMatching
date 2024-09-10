@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -20,6 +22,11 @@ public class MatchForm{
     private String foodType;
     private String timeSlot;
     private String preferGender;
+
+    @ElementCollection
+    @CollectionTable(name = "match_time_slots", joinColumns = @JoinColumn(name = "match_form_id"))
+    @Column(name = "time_slot")
+    private List<Integer> timeSlots;  // 여러 시간을 저장하는 리스트
 
     public MatchForm(){
     }

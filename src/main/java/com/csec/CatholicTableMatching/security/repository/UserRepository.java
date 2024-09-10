@@ -16,8 +16,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByMatchedFalse();
     Optional<User> findUserByName(String name);
 
-    @Query("SELECT u FROM CUSER u JOIN u.matchForm mf WHERE mf.foodType = :foodType AND mf.timeSlot = :timeSlot AND u.gender = :preferGender AND u.matched = :matched")
+    @Query("SELECT u FROM CUSER u JOIN u.matchForm mf WHERE mf.foodType = :foodType AND u.gender = :preferGender AND u.matched = :matched")
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    List<User> findMatchesByPreferences(String foodType, String timeSlot, String preferGender, boolean matched);
+    List<User> findMatchesByPreferences(String foodType, String preferGender, boolean matched);
 
 }

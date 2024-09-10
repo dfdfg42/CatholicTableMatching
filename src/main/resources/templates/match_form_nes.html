@@ -38,15 +38,110 @@
         </div>
         <!-- 식사 시간 선택 -->
         <div class="nes-field">
-            <label for="mealTime">식사 시간</label>
-            <div class="nes-select is-warning">
-                <select id="mealTime" th:field="*{timeSlot}" required>
-                    <option value="" disabled selected>식사 시간</option>
-                    <option value="점심">점심</option>
-                    <option value="저녁">저녁</option>
-                </select>
+            <label>식사 시간 선택</label>
+
+            <div style="background-color:#212529; padding: 1rem 0;">
+                <!-- 0시부터 23시까지 시간 선택 체크박스 -->
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="0">
+                    <span>00:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="1">
+                    <span>01:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="2">
+                    <span>02:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="3">
+                    <span>03:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="4">
+                    <span>04:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="5">
+                    <span>05:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="6">
+                    <span>06:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="7">
+                    <span>07:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="8">
+                    <span>08:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="9">
+                    <span>09:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="10">
+                    <span>10:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="11">
+                    <span>11:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="12">
+                    <span>12:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="13">
+                    <span>13:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="14">
+                    <span>14:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="15">
+                    <span>15:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="16">
+                    <span>16:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="17">
+                    <span>17:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="18">
+                    <span>18:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="19">
+                    <span>19:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="20">
+                    <span>20:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="21">
+                    <span>21:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="22">
+                    <span>22:00</span>
+                </label>
+                <label>
+                    <input type="checkbox" class="nes-checkbox is-dark" name="timeSlots" value="23">
+                    <span>23:00</span>
+                </label>
             </div>
         </div>
+
+
         <div class="nes-field">
             <label>매칭선호</label>
             <div class="nes-radio-group" style="background-color:#212529; padding: 1rem 0;">
