@@ -69,7 +69,7 @@ public class MatchingService {
 
 
             if (bestMatch != null) {
-                Match bestUserMatch = new Match(user, bestMatch, new Date(), matchForm.getTimeSlot(), matchForm.getFoodType());
+                Match bestUserMatch = new Match(user, bestMatch, new Date(), matchForm.getTimeSlots().toString(), matchForm.getFoodType());
 
                 bestMatch.setMatched(true);
                 user.setMatched(true);
