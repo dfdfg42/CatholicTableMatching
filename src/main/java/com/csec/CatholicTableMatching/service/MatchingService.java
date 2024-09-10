@@ -8,6 +8,8 @@ import com.csec.CatholicTableMatching.security.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,12 +21,32 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@EnableScheduling
 public class MatchingService {
     private final UserRepository userRepository;
     private final MatchRepository matchRepository;
     private final Lock lock = new ReentrantLock(); // 락 걸어버리기
     private final MatchFormRepository matchFormRepository;
 
+
+    // 오전 5시 59분에 Match와 MatchForm을 삭제하는 스케줄 작업
+    @Scheduled(cron = "59 59 5 * * *") // 매일 오전 5시 59분에 실행
+    @Transactional
+    public void clearMatchesAndMatchForms() {
+        matchRepository.deleteAll();
+        matchFormRepository.deleteAll();
+        System.out.println("모든 매칭과 매칭 폼이 삭제되었습니다.");
+    }
+
+    // 오전 6시에 새로운 매칭을 생성하는 스케줄 작업
+    @Scheduled(cron = "0 0 6 * * *") // 매일 오전 6시에 실행
+    @Transactional
+    public void createMatches() {
+        createMatchForAllUsers();  // 기존에 작성된 매칭 생성 로직을 호출
+        //메세지 발송 로직도 추가해야됨
+        System.out.println("새로운 매칭이 생성되었습니다.");
+    }
+    
     @Transactional
     public void createMatchForAllUsers() {
         List<User> users = userRepository.findAll();
