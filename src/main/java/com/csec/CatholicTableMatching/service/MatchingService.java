@@ -102,7 +102,13 @@ public class MatchingService {
 
 
             if (bestMatch != null) {
-                Match bestUserMatch = new Match(user, bestMatch, new Date(), matchForm.getTimeSlots().toString(), matchForm.getFoodType());
+                // 두 유저의 timeSlots 중 더 짧은 배열을 선택
+                List<Integer> shorterTimeSlots = matchForm.getTimeSlots().size() < bestMatch.getMatchForm().getTimeSlots().size()
+                        ? matchForm.getTimeSlots()
+                        : bestMatch.getMatchForm().getTimeSlots();
+
+                // Match 객체에 더 짧은 timeSlots 배열을 저장
+                Match bestUserMatch = new Match(user, bestMatch, new Date(), shorterTimeSlots.toString(), matchForm.getFoodType());
 
                 bestMatch.setMatched(true);
                 user.setMatched(true);
