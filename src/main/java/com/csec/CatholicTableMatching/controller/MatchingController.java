@@ -167,7 +167,7 @@ public class MatchingController {
 
 
 
-    @PostConstruct
+   /* @PostConstruct
     @Transactional
     public void testCreateMatch() {
         String phone1 = "01039077292";
@@ -225,5 +225,5 @@ public class MatchingController {
             // User 저장
             userRepository.save(user);
         });
-    }
+    }*/
 }
