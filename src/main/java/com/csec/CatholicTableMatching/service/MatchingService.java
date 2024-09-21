@@ -1,7 +1,7 @@
 package com.csec.CatholicTableMatching.service;
 
-import com.csec.CatholicTableMatching.controller.MessageController;
-import com.csec.CatholicTableMatching.domain.*;
+import com.csec.CatholicTableMatching.domain.Match;
+import com.csec.CatholicTableMatching.domain.MatchForm;
 import com.csec.CatholicTableMatching.repository.MatchFormRepository;
 import com.csec.CatholicTableMatching.repository.MatchRepository;
 import com.csec.CatholicTableMatching.security.domain.User;
@@ -9,16 +9,11 @@ import com.csec.CatholicTableMatching.security.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.bridge.Message;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -27,13 +22,13 @@ import java.util.concurrent.locks.ReentrantLock;
 public class MatchingService {
     private final UserRepository userRepository;
     private final MatchRepository matchRepository;
-    private final Lock lock = new ReentrantLock(); // 락 걸어버리기
     private final MatchFormRepository matchFormRepository;
-    private final MessageController messageController;
+    private final SendMessageService sendMessageService;
 
+    private final Object lock = new Object();
 
     // 오전 5시 59분에 Match와 MatchForm을 삭제하는 스케줄 작업
-    @Scheduled(cron = "59 59 5 * * *") // 매일 오전 5시 59분에 실행
+    @Scheduled(cron = "59 59 5 * * *")
     @Transactional
     public void clearMatchesAndMatchForms() {
         matchRepository.deleteAll();
@@ -42,40 +37,27 @@ public class MatchingService {
     }
 
     // 오전 6시에 새로운 매칭을 생성하는 스케줄 작업
-    @Scheduled(cron = "0 0 6 * * *") // 매일 오전 6시에 실행
+    @Scheduled(cron = "0 0 6 * * *")
     @Transactional
     public void createMatches() {
-        createMatchForAllUsers();  // 기존에 작성된 매칭 생성 로직을 호출
-
-        messageController.sendAllSms();
+        createMatchForAllUsers();
+        sendMessageService.sendAllSms();
         System.out.println("새로운 매칭이 생성되었습니다.");
-
-
     }
-
-
-
-
-
 
     @Transactional
     public void createMatchForAllUsers() {
         List<User> users = userRepository.findAll();
-        List<Match> matches = new ArrayList<>();
         for (User user : users) {
-            if (!user.isMatched() && !(user.getMatchForm() == null)) {
-                Match match = createMatch(user);
-                if (match != null) {
-                    matches.add(match);
-                }
+            if (!user.isMatched() && user.getMatchForm() != null) {
+                createMatch(user);
             }
         }
     }
 
     @Transactional
     public Match createMatch(User user) {
-        lock.lock(); // 락 걸기
-        try {
+        synchronized (lock) {
             MatchForm matchForm = user.getMatchForm();
             List<User> potentialMatches = userRepository.findMatchesByPreferences(
                     matchForm.getFoodType(), matchForm.getPreferGender(), false);
@@ -87,10 +69,9 @@ public class MatchingService {
                 if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId())
                         && !potentialMatch.getGender().equals(user.getGender())) {
 
-                    // 시간대 겹치는 부분을 계산
-                    int overlapCount = getOverlapCount(matchForm.getTimeSlots(), potentialMatch.getMatchForm().getTimeSlots());
+                    int overlapCount = getOverlapCount(matchForm.getTimeSlots(),
+                            potentialMatch.getMatchForm().getTimeSlots());
 
-                    // 가장 많은 시간이 겹치는 유저를 찾는다.
                     if (overlapCount > maxOverlap) {
                         bestMatch = potentialMatch;
                         maxOverlap = overlapCount;
@@ -98,17 +79,14 @@ public class MatchingService {
                 }
             }
 
-            log.info("Final max overlap for user {}: {}", user.getName(), maxOverlap);
-
-
             if (bestMatch != null) {
-                // 두 유저의 timeSlots 중 더 짧은 배열을 선택
-                List<Integer> shorterTimeSlots = matchForm.getTimeSlots().size() < bestMatch.getMatchForm().getTimeSlots().size()
+                List<Integer> shorterTimeSlots = matchForm.getTimeSlots().size() <
+                        bestMatch.getMatchForm().getTimeSlots().size()
                         ? matchForm.getTimeSlots()
                         : bestMatch.getMatchForm().getTimeSlots();
 
-                // Match 객체에 더 짧은 timeSlots 배열을 저장
-                Match bestUserMatch = new Match(user, bestMatch, new Date(), shorterTimeSlots.toString(), matchForm.getFoodType());
+                Match bestUserMatch = new Match(user, bestMatch, new Date(),
+                        shorterTimeSlots.toString(), matchForm.getFoodType());
 
                 bestMatch.setMatched(true);
                 user.setMatched(true);
@@ -118,21 +96,14 @@ public class MatchingService {
                 return matchRepository.save(bestUserMatch);
             }
 
-            return null; // 매칭되는 유저가 없는 경우
-        } finally {
-            lock.unlock(); // 락 해제
+            return null;
         }
     }
 
-    // 두 유저의 시간 리스트에서 겹치는 시간이 몇 개인지 계산하는 메서드
     private int getOverlapCount(List<Integer> userTimeSlots, List<Integer> potentialMatchTimeSlots) {
-        int overlapCount = 0;
-        for (Integer timeSlot : userTimeSlots) {
-            if (potentialMatchTimeSlots.contains(timeSlot)) {
-                overlapCount++;
-            }
-        }
-        return overlapCount;
+        Set<Integer> userTimeSet = new HashSet<>(userTimeSlots);
+        userTimeSet.retainAll(potentialMatchTimeSlots);
+        return userTimeSet.size();
     }
 
     @Transactional

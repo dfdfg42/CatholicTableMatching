@@ -3,7 +3,6 @@ package com.csec.CatholicTableMatching.controller;
 import com.csec.CatholicTableMatching.domain.Match;
 import com.csec.CatholicTableMatching.domain.MatchForm;
 import com.csec.CatholicTableMatching.repository.MatchFormRepository;
-import com.csec.CatholicTableMatching.repository.MatchRepository;
 import com.csec.CatholicTableMatching.security.domain.User;
 import com.csec.CatholicTableMatching.security.oauth.PrincipalDetails;
 import com.csec.CatholicTableMatching.security.repository.UserRepository;
@@ -30,14 +29,8 @@ import java.util.stream.IntStream;
 public class MatchingController {
 
     private final MatchingService matchingService;
-
     private final UserRepository userRepository;
-
-    private final MatchFormRepository matchFormRepository;
-
     private final EncryptService encryptService;
-
-    private MatchForm matchForm;
 
     @GetMapping("/")
     public String showHomePage() {
@@ -46,128 +39,119 @@ public class MatchingController {
 
     @GetMapping("/match")
     @PreAuthorize("isAuthenticated()")
-    public String MatchStart(@AuthenticationPrincipal PrincipalDetails userDetails,@ModelAttribute User user , Model model){
-        User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
-                () -> new RuntimeException());
+    public String matchStart(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
+        User loginUser = userRepository.findByLoginId(userDetails.getUsername())
+                .orElseThrow(RuntimeException::new);
+
         if (loginUser.getPhoneNum() == null) {
             return "redirect:/userinfo";
-        }else if(loginUser.getMatchForm() != null){
+        } else if (loginUser.getMatchForm() != null) {
             return "redirect:/matching";
-        }
-        else{
+        } else {
             loginUser.setPhoneNum(encryptService.decrypt(loginUser.getPhoneNum()));
-            model.addAttribute("user", loginUser); //네비바때문에 넘김
+            model.addAttribute("user", loginUser);
             model.addAttribute("matchForm", new MatchForm());
             return "match_form_nes";
         }
-    } // 매치 폼 화면이동
+    }
 
     @PostMapping("/match")
     @PreAuthorize("isAuthenticated()")
     public String findMatches(@ModelAttribute("matchForm") MatchForm matchForm, Principal principal) {
-        // 현재 인증된 사용자의 정보를 조회
         String loginId = principal.getName();
         User user = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new RuntimeException("Authenticated user not found"));
 
-        // MatchForm과 User를 연결
         matchForm.setUser(user);
-        user.setMatchForm(matchForm); // 편의 메서드를 사용하여 양방향 설정
-        userRepository.save(user);    // User 저장
+        user.setMatchForm(matchForm);
+        userRepository.save(user);
 
-        return "redirect:/matching";  // 사용자의 ID를 이용해 리디렉션
+        return "redirect:/matching";
     }
 
     @GetMapping("/matching")
     @PreAuthorize("isAuthenticated()")
-    public String matching(@AuthenticationPrincipal PrincipalDetails userDetails,Model model){
-        User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
-                () -> new RuntimeException());
-        if (loginUser.isMatched()){
-            return "redirect:/match/"+ loginUser.getId();
+    public String matching(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
+        User loginUser = userRepository.findByLoginId(userDetails.getUsername())
+                .orElseThrow(RuntimeException::new);
+
+        if (loginUser.isMatched()) {
+            return "redirect:/match/" + loginUser.getId();
         }
-        model.addAttribute("user" , loginUser); //네비바때문에 넘김
+        model.addAttribute("user", loginUser);
         return "matching";
-    } //사용자가 매칭을 넣었을때 넣었다고 보여지는 화면
+    }
 
-
-    //전체 매칭한 결과 페이지 (어드민 전용)
     @PostMapping("/matchResult")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String createAllMatches(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
         matchingService.createMatchForAllUsers();
-        User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
-                () -> new RuntimeException());
+        User loginUser = userRepository.findByLoginId(userDetails.getUsername())
+                .orElseThrow(RuntimeException::new);
         List<Match> matches = matchingService.MatchResult();
-        model.addAttribute("user",loginUser);
+        model.addAttribute("user", loginUser);
         model.addAttribute("matches", matches);
-        return "redirect:/matchResult";  // 매칭 결과 페이지 뷰 이름
+        return "redirect:/matchResult";
     }
-
 
     @GetMapping("/matchResult")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String findAllMatches(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
-        User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
-                () -> new RuntimeException());
+        User loginUser = userRepository.findByLoginId(userDetails.getUsername())
+                .orElseThrow(RuntimeException::new);
         List<Match> matches = matchingService.MatchResult();
-        model.addAttribute("user",loginUser);
+        model.addAttribute("user", loginUser);
         model.addAttribute("matches", matches);
-        return "match_results";  // 매칭 결과 페이지 뷰 이름
+        return "match_results";
     }
-
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping("/match/{userId}")
-    public String MatchStatus(@AuthenticationPrincipal PrincipalDetails userDetails,
-                              @PathVariable("userId") Long userId, Model model){
-        User user = userRepository.findUserById(userId).orElseThrow(
-                () -> new RuntimeException("No customer found with ID " + userId));
+    public String matchStatus(@AuthenticationPrincipal PrincipalDetails userDetails,
+                              @PathVariable("userId") Long userId, Model model) {
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new RuntimeException("No customer found with ID " + userId));
         if (!user.getLoginId().equals(userDetails.getUsername())) {
             return "redirect:/match";
         }
-        if(!user.isMatched() && user.getMatchForm()!= null){
+        if (!user.isMatched() && user.getMatchForm() != null) {
             return "redirect:/matching";
         }
-        if(user.isMatched()){
-            User partner =matchingService.findPartner(user);
-            String partnerName =partner.getName();
-            model.addAttribute("partnerName" ,partnerName);
-        } //파트너 이름 찾는 과정
+        if (user.isMatched()) {
+            User partner = matchingService.findPartner(user);
+            String partnerName = partner.getName();
+            model.addAttribute("partnerName", partnerName);
+        }
         model.addAttribute("user", user);
         return "match_status";
-
-    } // 매치 현황판*/ 사용자가 나중에 매칭결과를 확인할수 있게 만드는창??
+    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/userinfo")
-    public String userInfo(@AuthenticationPrincipal PrincipalDetails userDetails, @ModelAttribute User user, Model model){
-        User loginUser = userRepository.findByLoginId(userDetails.getUsername()).orElseThrow(
-                () -> new RuntimeException());
-        if (loginUser.getPhoneNum() !=null){
-            loginUser.setPhoneNum(encryptService.decrypt(loginUser.getPhoneNum())); // 번호있을때만 암호화풀고 넘김
+    public String userInfo(@AuthenticationPrincipal PrincipalDetails userDetails, Model model) {
+        User loginUser = userRepository.findByLoginId(userDetails.getUsername())
+                .orElseThrow(RuntimeException::new);
+        if (loginUser.getPhoneNum() != null) {
+            loginUser.setPhoneNum(encryptService.decrypt(loginUser.getPhoneNum()));
         }
-        model.addAttribute("user",loginUser);
+        model.addAttribute("user", loginUser);
         return "user_form";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/userinfo")
-    public String saveUserInfo(@AuthenticationPrincipal PrincipalDetails userDetails, @ModelAttribute("user") User user) {
+    public String saveUserInfo(@AuthenticationPrincipal PrincipalDetails userDetails,
+                               @ModelAttribute("user") User user) {
         String username = userDetails.getUsername();
         User loginUser = userRepository.findByLoginId(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        loginUser.updateUserInfo(user.getName(),user.getGender(), encryptService.encrypt(user.getPhoneNum()));
-
+        loginUser.updateUserInfo(user.getName(), user.getGender(), encryptService.encrypt(user.getPhoneNum()));
         userRepository.save(loginUser);
 
         return "redirect:/match";
     }
-
-
-
-   /* @PostConstruct
+    @PostConstruct
     @Transactional
     public void testCreateMatch() {
         String phone1 = "01039077292";
@@ -225,5 +209,11 @@ public class MatchingController {
             // User 저장
             userRepository.save(user);
         });
-    }*/
+    }
+
 }
+
+
+
+
+

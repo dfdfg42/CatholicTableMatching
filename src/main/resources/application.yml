@@ -1,4 +1,7 @@
 spring:
+  sender:
+    phone:
+      number: "01039077292"
   config:
     import:
       - classpath:/key.yml
@@ -25,3 +28,4 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type.descriptor.sql: trace
+
