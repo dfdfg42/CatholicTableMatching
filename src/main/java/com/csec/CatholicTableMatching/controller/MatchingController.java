@@ -18,10 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @Controller
@@ -165,8 +162,8 @@ public class MatchingController {
         List<Integer> timeSlotsKo = Arrays.asList(18, 19, 20); // 예: 저녁시간대 (18시, 19시, 20시)
         List<Integer> timeSlotsKim = Arrays.asList(18, 19, 20); // 예: 저녁시간대
 
-        MatchForm matchFormko = new MatchForm(userko, "한식", timeSlotsKo, "F");
-        MatchForm matchFormkim = new MatchForm(userkim, "한식", timeSlotsKim, "M");
+        MatchForm matchFormko = new MatchForm(userko, "한식", timeSlotsKo, "이성");
+        MatchForm matchFormkim = new MatchForm(userkim, "한식", timeSlotsKim, "이성");
 
         // User와 MatchForm 연결
         userko.setMatchForm(matchFormko);
@@ -179,6 +176,7 @@ public class MatchingController {
         // 무작위 생성기
         Random random = new Random();
         List<String> foodTypes = Arrays.asList("한식", "일식", "양식", "중식");
+        List<String> genderPreferences = Arrays.asList("동성", "이성"); // 동성 또는 이성 중 선택
 
         // 가능한 시간대 (0~23 시간대, 랜덤 선택용)
         List<Integer> possibleTimeSlots = Arrays.asList(9, 10, 12, 18, 19, 20);
@@ -190,18 +188,25 @@ public class MatchingController {
             String phoneNum = "010" + String.format("%08d", i); // 고유한 전화번호 생성
             boolean matched = false;
 
-            // User 객체 생성
-            User user = new User(userName, userName, gender, phoneNum, matched);
+            // User 객체 생성 (전화번호 암호화)
+            User user = new User(userName, userName, gender, encryptService.encrypt(phoneNum), matched);
 
             // 랜덤으로 foodType 선택
             String foodType = foodTypes.get(random.nextInt(foodTypes.size()));
 
-            // 랜덤으로 3개의 시간대 선택
+            // 랜덤으로 genderPreference 선택 (동성 또는 이성)
+            String preferGender = genderPreferences.get(random.nextInt(genderPreferences.size()));
+
+            // 랜덤으로 1~3개의 시간대 선택
             Collections.shuffle(possibleTimeSlots);
-            List<Integer> randomTimeSlots = possibleTimeSlots.subList(0, random.nextInt(3) + 1); // 1~3개의 시간대 선택
+            List<Integer> randomTimeSlots = new ArrayList<>();
+            int numberOfSlots = random.nextInt(3) + 1; // 1~3개의 시간대 선택
+            for (int j = 0; j < numberOfSlots; j++) {
+                randomTimeSlots.add(possibleTimeSlots.get(j));
+            }
 
             // MatchForm 객체 생성
-            MatchForm matchForm = new MatchForm(user, foodType, randomTimeSlots, "F");
+            MatchForm matchForm = new MatchForm(user, foodType, randomTimeSlots, preferGender);
 
             // User와 MatchForm 연결
             user.setMatchForm(matchForm);
@@ -209,6 +214,8 @@ public class MatchingController {
             // User 저장
             userRepository.save(user);
         });
+
+        System.out.println("테스트용 매칭 데이터가 생성되었습니다.");
     }
 
 }

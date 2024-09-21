@@ -66,15 +66,26 @@ public class MatchingService {
     public Match createMatch(User user) {
         synchronized (lock) {
             MatchForm matchForm = user.getMatchForm();
+
+            // preferGender가 "동성"이면 사용자의 성별을, "이성"이면 반대 성별을 설정
+            String desiredGender;
+            if ("동성".equals(matchForm.getPreferGender())) {
+                desiredGender = user.getGender();
+            } else if ("이성".equals(matchForm.getPreferGender())) {
+                desiredGender = user.getGender().equals("M") ? "F" : "M";
+            } else {
+                // preferGender가 특정 성별을 의미하는 경우
+                desiredGender = matchForm.getPreferGender();
+            }
+
             List<User> potentialMatches = userRepository.findMatchesByPreferences(
-                    matchForm.getFoodType(), matchForm.getPreferGender(), false);
+                    matchForm.getFoodType(), desiredGender, false);
 
             User bestMatch = null;
             int maxOverlap = 0;
 
             for (User potentialMatch : potentialMatches) {
-                if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId())
-                        && !potentialMatch.getGender().equals(user.getGender())) {
+                if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId())) {
 
                     int overlapCount = getOverlapCount(matchForm.getTimeSlots(),
                             potentialMatch.getMatchForm().getTimeSlots());
@@ -106,6 +117,7 @@ public class MatchingService {
             return null;
         }
     }
+
 
     private int getOverlapCount(List<Integer> userTimeSlots, List<Integer> potentialMatchTimeSlots) {
         Set<Integer> userTimeSet = new HashSet<>(userTimeSlots);
