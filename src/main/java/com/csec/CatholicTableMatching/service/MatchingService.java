@@ -33,6 +33,13 @@ public class MatchingService {
     public void clearMatchesAndMatchForms() {
         matchRepository.deleteAll();
         matchFormRepository.deleteAll();
+
+        List<User> users = userRepository.findAll();
+
+        for(User user : users){
+            user.setMatched(false);
+        }
+
         System.out.println("모든 매칭과 매칭 폼이 삭제되었습니다.");
     }
 
