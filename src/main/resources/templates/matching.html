@@ -34,7 +34,8 @@
     <div>
         <p>나의 만냠요청</p>
         <p th:text="'음식종류: ' + ${user.getMatchForm().foodType}"></p>
-        <p th:text="${user.getMatchForm() != null && user.getMatchForm().timeSlot != null ? user.getMatchForm().timeSlot.toString() : '시간선택안됨'}"></p>
+        <!--<p th:text="${user.getMatchForm() != null && user.getMatchForm().timeSlot != null ? user.getMatchForm().timeSlot.toString() : '시간선택안됨'}"></p> -->
+        <p th:text="'이성/동성: ' + ${user.getMatchForm().preferGender}"></p>
     </div>
 </div>
 

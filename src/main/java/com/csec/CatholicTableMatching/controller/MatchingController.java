@@ -148,7 +148,7 @@ public class MatchingController {
 
         return "redirect:/match";
     }
-    @PostConstruct
+   /* @PostConstruct
     @Transactional
     public void testCreateMatch() {
         String phone1 = "01039077292";
@@ -216,7 +216,7 @@ public class MatchingController {
         });
 
         System.out.println("테스트용 매칭 데이터가 생성되었습니다.");
-    }
+    }*/
 
 }
 

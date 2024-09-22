@@ -31,8 +31,10 @@
             <div class="nes-container is-rounded match">
                 <p th:text="'내이름: ' + ${user.getName()}"></p>
                 <p th:text="'음식종류: ' + ${user.getMatchForm().foodType}"></p>
-                <p th:text="'시간: ' + ${user.getMatchForm().timeSlot}"></p>
+                <!-- <p th:text="'시간: ' + ${user.getMatchForm().timeSlot}"></p> -->
+                <p th:text="'이성/동성: ' + ${user.getMatchForm().preferGender}"></p>
                 <p th:text="'파트너 이름: ' + ${partnerName}"></p>
+
             </div>
         </div>
     </div>
