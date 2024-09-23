@@ -67,7 +67,7 @@ public class MatchingService {
         synchronized (lock) {
             MatchForm matchForm = user.getMatchForm();
 
-            // preferGender가 "동성"이면 사용자의 성별을, "이성"이면 반대 성별을 설정
+            // 사용자의 선호 성별 설정
             String desiredGender;
             if ("동성".equals(matchForm.getPreferGender())) {
                 desiredGender = user.getGender();
@@ -78,6 +78,7 @@ public class MatchingService {
                 desiredGender = matchForm.getPreferGender();
             }
 
+            // 사용자의 선호에 맞는 잠재적 매치 찾기
             List<User> potentialMatches = userRepository.findMatchesByPreferences(
                     matchForm.getFoodType(), desiredGender, false);
 
@@ -87,8 +88,24 @@ public class MatchingService {
             for (User potentialMatch : potentialMatches) {
                 if (!potentialMatch.isMatched() && !potentialMatch.getId().equals(user.getId())) {
 
+                    // 상대방의 선호 성별 설정
+                    MatchForm potentialMatchForm = potentialMatch.getMatchForm();
+                    String potentialDesiredGender;
+                    if ("동성".equals(potentialMatchForm.getPreferGender())) {
+                        potentialDesiredGender = potentialMatch.getGender();
+                    } else if ("이성".equals(potentialMatchForm.getPreferGender())) {
+                        potentialDesiredGender = potentialMatch.getGender().equals("M") ? "F" : "M";
+                    } else {
+                        potentialDesiredGender = potentialMatchForm.getPreferGender();
+                    }
+
+                    // 현재 사용자와 잠재적 매치의 성별 호환성 확인
+                    if (!user.getGender().equals(potentialDesiredGender)) {
+                        continue; // 상대방의 선호에 맞지 않으면 패스
+                    }
+
                     int overlapCount = getOverlapCount(matchForm.getTimeSlots(),
-                            potentialMatch.getMatchForm().getTimeSlots());
+                            potentialMatchForm.getTimeSlots());
 
                     if (overlapCount > maxOverlap) {
                         bestMatch = potentialMatch;
@@ -117,6 +134,7 @@ public class MatchingService {
             return null;
         }
     }
+
 
 
     private int getOverlapCount(List<Integer> userTimeSlots, List<Integer> potentialMatchTimeSlots) {

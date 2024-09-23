@@ -173,6 +173,66 @@ public class MatchingController {
         userRepository.save(userko);
         userRepository.save(userkim);
 
+
+// 추가할 테스트 더미 데이터
+
+// 1. 남남 동성
+        String phone3 = "01012345678";
+        String phone4 = "01087654321";
+
+        User userA = new User("김철수", "200", "M", encryptService.encrypt(phone3), false);
+        User userB = new User("박영희", "201", "M", encryptService.encrypt(phone4), false);
+
+        List<Integer> timeSlotsA = Arrays.asList(9, 10, 11); // 예: 오전시간대
+        List<Integer> timeSlotsB = Arrays.asList(9, 10, 11); // 예: 오전시간대
+
+        MatchForm matchFormA = new MatchForm(userA, "중식", timeSlotsA, "동성");
+        MatchForm matchFormB = new MatchForm(userB, "중식", timeSlotsB, "동성");
+
+        userA.setMatchForm(matchFormA);
+        userB.setMatchForm(matchFormB);
+
+        userRepository.save(userA);
+        userRepository.save(userB);
+
+// 2. 남녀 동성
+        String phone5 = "01011223344";
+        String phone6 = "01044332211";
+
+        User userC = new User("최민수", "300", "M", encryptService.encrypt(phone5), false);
+        User userD = new User("이수진", "301", "F", encryptService.encrypt(phone6), false);
+
+        List<Integer> timeSlotsC = Arrays.asList(14, 15, 16); // 예: 오후시간대
+        List<Integer> timeSlotsD = Arrays.asList(14, 15, 16); // 예: 오후시간대
+
+        MatchForm matchFormC = new MatchForm(userC, "일식", timeSlotsC, "동성");
+        MatchForm matchFormD = new MatchForm(userD, "일식", timeSlotsD, "동성");
+
+        userC.setMatchForm(matchFormC);
+        userD.setMatchForm(matchFormD);
+
+        userRepository.save(userC);
+        userRepository.save(userD);
+
+// 3. 남녀 이성
+        String phone7 = "01055667788";
+        String phone8 = "01088776655";
+
+        User userE = new User("장혁", "400", "M", encryptService.encrypt(phone7), false);
+        User userF = new User("홍길동", "401", "F", encryptService.encrypt(phone8), false);
+
+        List<Integer> timeSlotsE = Arrays.asList(19, 20, 21); // 예: 저녁시간대
+        List<Integer> timeSlotsF = Arrays.asList(19, 20, 21); // 예: 저녁시간대
+
+        MatchForm matchFormE = new MatchForm(userE, "양식", timeSlotsE, "이성");
+        MatchForm matchFormF = new MatchForm(userF, "양식", timeSlotsF, "이성");
+
+        userE.setMatchForm(matchFormE);
+        userF.setMatchForm(matchFormF);
+
+        userRepository.save(userE);
+        userRepository.save(userF);
+
         // 무작위 생성기
         Random random = new Random();
         List<String> foodTypes = Arrays.asList("한식", "일식", "양식", "중식");
