@@ -31,18 +31,20 @@ public class MatchingService {
     @Scheduled(cron = "59 59 5 * * *")
     @Transactional
     public void clearMatchesAndMatchForms() {
+        // 모든 User 엔티티의 matchForm을 null로 설정
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            user.setMatchForm(null);
+            user.setMatched(false);
+        }
+        userRepository.saveAll(users);
+
+        // 이제 Match와 MatchForm을 삭제
         matchRepository.deleteAll();
         matchFormRepository.deleteAll();
 
-        List<User> users = userRepository.findAll();
-
-        for(User user : users){
-            user.setMatched(false);
-        }
-
         System.out.println("모든 매칭과 매칭 폼이 삭제되었습니다.");
     }
-
     // 오전 6시에 새로운 매칭을 생성하는 스케줄 작업
     @Scheduled(cron = "0 0 6 * * *")
     @Transactional
